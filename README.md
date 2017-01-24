@@ -35,5 +35,66 @@ Implements `List`
 | Fail-fast                                | same                               |
 
 
+## Iteration for `Map` and `Set`
 
+- for `Map`
+
+```java
+// old syntax
+public static void printMap(Map mp) {
+    Iterator it = mp.entrySet().iterator();
+    while (it.hasNext()) {
+        Map.Entry pair = (Map.Entry)it.next();
+        System.out.println(pair.getKey() + " = " + pair.getValue());
+        it.remove(); // avoids a ConcurrentModificationException
+    }
+}
+
+// output:
+// 1 = 1
+// 2 = 2
+// 3 = 3
+
+
+// new syntax
+for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " = " + entry.getValue());
+}
+
+// output:
+// 1 = 1
+// 2 = 2
+// 3 = 3
+```
+
+- for 'Set'
+
+```java
+// old syntax
+HashSet<Integer> sets = new HashSet<Integer>();
+sets.add(1);
+sets.add(2);
+
+Iterator iter = sets.iterator();
+while (iter.hasNext()) {
+    System.out.println(iter.next());
+}
+
+// output:
+// 1
+// 2
+
+//new syntax
+HashSet<Integer> sets = new HashSet<Integer>();
+sets.add(1);
+sets.add(2);
+
+for(Integer i : sets) {
+    System.out.println(i);
+}
+
+// output:
+// 1
+// 2
+```
 
