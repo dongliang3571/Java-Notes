@@ -109,7 +109,8 @@ The ability of a subclass to override a method allows a class to inherit from a 
 
 ### Static Method
 
-## Inheritance, casting, override
+
+## Inheritance
 
 
 Assume we have class `Dog` and `ShowDog`, and `ShowDog` is inherited from `Dog`.
@@ -118,6 +119,12 @@ Assume we have class `Dog` and `ShowDog`, and `ShowDog` is inherited from `Dog`.
 public class Dog {
     public void bark() {
         System.out.println("Dog");
+    }
+    public void barkMany(int N) {
+        System.out.println("As a dog, I say: ");
+        for(int i = 0; i < N; i++) {
+            bark();
+        }
     }
 }
 
@@ -130,6 +137,9 @@ public class ShowDog extends Dog {
 }
 ```
 
+
+## Casting subclasses
+
 - Compiler allows memory box to hold any subtype
 
 ```java
@@ -140,7 +150,7 @@ Object o2 = new ShowDog();
 - Compiler allows calls based on static type
 
 ```java
-Object o2 = new ShowDog("Mortimer", "Corgi", 25, 532.3); 
+Object o2 = new ShowDog(); 
 Object o3 = (Dog)o2; 
 // Assignment works, because o2 has runtime type ShowDog, and ShowDog is inherited from Dog, i.e. ShowDog is subtype(or subclass) of Dog.
 
@@ -149,6 +159,138 @@ o3.bark()
 
 
 ## Package
+
+**Definition:** A package is a grouping of related types providing access protection and name space management. Note that types refers to classes, interfaces, enumerations, and annotation types. Enumerations and annotation types are special kinds of classes and interfaces, respectively, so types are often referred to in this lesson simply as classes and interfaces.
+
+**Note:** Package are simply the directly path, i.e. `import tools.graphics.Draw` -> /tools/graphics/Draw.java
+and `import tools.Dog` -> /tools/Dog.java.
+
+**Naming convention**
+
+- Package names are written in all lower case to avoid conflict with the names of classes or interfaces.
+
+- Companies use their reversed Internet domain name to begin their package names—for example, com.example.mypackage for a package named mypackage created by a programmer at example.com.
+
+
+**Directory:**
+
+```
+- tools
+    ||
+    | -->graphics
+    |        |
+    |         -->Draw.java
+     --->Dog.java
+- DogLauncher.java
+```
+
+`package` keyword has to be at the first line of the file
+
+```java
+// /tools/Dog.java
+
+package tools;
+
+public class Dog {
+    public static void bark() {
+        System.out.println("Dog");
+    }
+}
+```
+
+```java
+// /tools/graphics/Draw.java
+
+package tools.graphics;
+
+public class Draw {
+    public static void paint() {
+        System.out.println("Draw");
+    }
+}
+```
+
+```java
+// DogLauncher.java
+
+import tools.Dog
+import tools.graphics.Draw
+
+public class DogLauncher {
+    public static void main(String[] args) {
+        Dog.bark(); // output: Dog
+        Draw.paint();   // output: Draw
+    }
+}
+```
+
+Another way using package without using `import`, we can refer to a Package Member by Its Qualified Name
+
+```java
+// DogLauncher.java
+
+public class DogLauncher {
+    public static void main(String[] args) {
+        tools.Dog.bark(); // output: Dog
+        tools.graphics.Draw.paint();   // output: Draw
+    }
+}
+```
+
+### Apparent Hierarchies of Packages
+
+At first, packages appear to be hierarchical, but they are not. For example, the Java API includes a java.awt package, a java.awt.color package, a java.awt.font package, and many others that begin with java.awt. However, the java.awt.color package, the java.awt.font package, and other java.awt.xxxx packages are not included in the java.awt package. The prefix java.awt (the Java Abstract Window Toolkit) is used for a number of related packages to make the relationship evident, but not to show inclusion.
+
+Importing java.awt.* imports all of the types in the java.awt package, but it does not import java.awt.color, java.awt.font, or any other java.awt.xxxx packages. If you plan to use the classes and other types in java.awt.color as well as those in java.awt, you must import both packages with all their files:
+
+`import java.awt.*;`
+`import java.awt.color.*;`
+
+### The static import statment
+
+There are situations where you need frequent access to static final fields (constants) and static methods from one or two classes. Prefixing the name of these classes over and over can result in cluttered code. ***The static import statement gives you a way to import the constants and static methods that you want to use so that you do not need to prefix the name of their class.***
+
+The `java.lang.Math` class defines the `PI` constant and many static methods, including methods for calculating sines, cosines, tangents, square roots, maxima, minima, exponents, and many more. For example,
+
+```java
+public static final double PI = 3.141592653589793;
+public static double cos(double a)
+{
+    ...
+}
+
+```
+
+Ordinarily, to use these objects from another class, you prefix the class name, as follows.
+
+```java
+double r = Math.cos(Math.PI * theta);
+```
+
+You can use the static import statement to import the static members of java.lang.Math so that you don't need to prefix the class name, Math. The static members of Math can be imported either individually:
+
+```java
+import static java.lang.Math.PI;
+```
+
+or as a group:
+
+```java
+import static java.lang.Math.*;
+```
+
+Once they have been imported, the static members can be used without qualification. For example, the previous code snippet would become:
+
+```java
+double r = cos(PI * theta);
+```
+
+Obviously, you can write your own classes that contain constants and static methods that you use frequently, and then use the static import statement. For example,
+
+```java
+import static mypackage.MyConstants.*;
+```
+
 
 ## Return Object
 
