@@ -110,6 +110,80 @@ The ability of a subclass to override a method allows a class to inherit from a 
 ### Static Method
 
 
+
+Example of **dynamic method dispatch(or dynamic method selection)** 
+
+```java
+interface Callee {
+    public void print();
+}
+
+class Callee1 implements Callee {
+    public void print() {
+        System.out.println("Callee1");
+    }
+}
+
+class Callee2 implements Callee {
+    public void print() {
+        System.out.println("Callee2");
+    }
+}
+
+public class DogLauncher {
+    public static void main(String[] args) {
+        Callee callee1 = new Callee1();
+        Callee callee2 = new Callee2();
+
+        Callee[] arr = new Callee[2];
+        arr[0] = callee1;
+        arr[1] = callee2;
+
+        for(Callee c : arr) {
+            c.print(); 
+            // output:
+            // Callee1
+            // Callee2
+        }
+    }
+}
+```
+
+Note that in Java, dynamic method dispatch happens only for the object the method is called on(e.g. different subclass which inherited from same parent in an array type of the parent, calls same method), not for the parameter types of overloaded methods(example below).
+
+```java
+interface Callee {
+    public void foo(Object o);
+    public void foo(String s);
+    public void foo(int i);
+}
+
+class CalleeImpl implements Callee {
+    public void foo(Object o) {
+        System.out.println("foo(Object o)");
+    }
+
+    public void foo(String s) {
+        System.out.println("foo(\"" + s + "\")");
+    }
+
+    public void foo(int i) {
+        System.out.println("foo(" + i + ")");
+    }
+}
+
+public static void main(String[] args) {
+    CalleeImpl callee = new CalleeImpl();
+    String s = "haha";
+    Object o = "haha";
+    
+    callee.foo(s); // output: foo("haha")
+    callee.foo(o); // output: foo(Object o)
+    
+    // method was selected depending on compilation-type, not runtime-type
+}
+```
+
 ## Inheritance
 
 
@@ -189,7 +263,20 @@ public class ShowDog extends Dog {
 
 
 
-## Casting subclasses
+## Casting
+
+### Compile-Time Type Checking
+
+```java
+public static void main(String[] args) {
+    VengefulSList<Integer> vsl = new VengefulSList<Integer>(9);
+    vsl.insertBack(50);
+    
+    SList<Integer> sl = vsl;
+    
+    sl.printLostItems(); // Compilation errors! Because sl is SList in compile-Time, and
+}
+```
 
 - Compiler allows memory box to hold any subtype
 
