@@ -121,7 +121,6 @@ public class Dog {
         System.out.println("Dog");
     }
     public void barkMany(int N) {
-        System.out.println("As a dog, I say: ");
         for(int i = 0; i < N; i++) {
             bark();
         }
@@ -130,12 +129,64 @@ public class Dog {
 
 public class ShowDog extends Dog {
     @override
-    public void back() {
-        System.out.println("ShowDog");
+    public void barkMany() {
+        System.out.println("As a dog, I say: ");
+        bark();
     }
-
+    
+    public static void main(String[] args) {
+        ShowDog sd = new ShowDog();
+        sd.barkMany(3); 
+        // output: 
+        // As a dog, I say: 
+        // Dog 
+        // Dog 
+        // Dog
+        
+        // will call overriding barkMany, and inside barkMany, bark() will be Dog's bark(), because ShowDog is
+        // inheried from Dog.
+    }
 }
 ```
+
+Now we change class `Dog` into:
+
+```java
+public class Dog {
+    public void bark() {
+        bakrMany(1);
+    }
+    public void barkMany(int N) {
+        for(int i = 0; i < N; i++) {
+            System.out.println("Dog");
+        }
+    }
+}
+
+public class ShowDog extends Dog {
+    @override
+    public void barkMany() {
+        System.out.println("As a dog, I say: ");
+        bark();
+    }
+    
+    public static void main(String[] args) {
+        ShowDog sd = new ShowDog();
+        sd.barkMany(3); 
+        // output: 
+        // As a dog, I say: 
+        // As a dog, I say:
+        // As a dog, I say:
+        // As a dog, I say:
+        // ........
+        // error!
+        
+        // will call overriding barkMany, and inside barkMany, bark() will be Dog's bark(), but inside bark(),
+        // ShowDog's barkMany() will be called. Because the runtime type for sd is ShowDog, not Dog.
+    }
+}
+```
+
 
 
 ## Casting subclasses
@@ -169,7 +220,7 @@ and `import tools.Dog` -> /tools/Dog.java.
 
 - Package names are written in all lower case to avoid conflict with the names of classes or interfaces.
 
-- Companies use their reversed Internet domain name to begin their package names—for example, com.example.mypackage for a package named mypackage created by a programmer at example.com.
+- Companies use their reversed Internet domain name to begin their package names—for example, com.example.mypackage for a package named mypackage created by a programmer at example.com. i.e /com/example/mypackage
 
 
 **Directory:**
@@ -239,12 +290,14 @@ public class DogLauncher {
 
 ### Apparent Hierarchies of Packages
 
-At first, packages appear to be hierarchical, but they are not. For example, the Java API includes a java.awt package, a java.awt.color package, a java.awt.font package, and many others that begin with java.awt. However, the java.awt.color package, the java.awt.font package, and other java.awt.xxxx packages are not included in the java.awt package. The prefix java.awt (the Java Abstract Window Toolkit) is used for a number of related packages to make the relationship evident, but not to show inclusion.
+At first, packages appear to be hierarchical, but they are not. For example, the Java API includes a `java.awt` package, a `java.awt.color` package, a `java.awt.font` package, and many others that begin with `java.awt`. However, the `java.awt.color` package, the `java.awt.font` package, and other `java.awt.xxxx` packages are not included in the `java.awt` package. The prefix `java.awt` (the Java Abstract Window Toolkit) is used for a number of related packages to make the relationship evident, but not to show inclusion.
 
-Importing java.awt.* imports all of the types in the java.awt package, but it does not import java.awt.color, java.awt.font, or any other java.awt.xxxx packages. If you plan to use the classes and other types in java.awt.color as well as those in java.awt, you must import both packages with all their files:
+Importing `java.awt.*` imports all of the types in the java.awt package, but it does not import `java.awt.color`, java.awt.font, or any other `java.awt.xxxx` packages. If you plan to use the classes and other types in `java.awt.color` as well as those in `java.awt`, you must import both packages with all their files:
 
-`import java.awt.*;`
-`import java.awt.color.*;`
+```java
+import java.awt.*;
+import java.awt.color.*;
+```
 
 ### The static import statment
 
