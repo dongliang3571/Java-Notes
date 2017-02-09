@@ -109,80 +109,57 @@ The ability of a subclass to override a method allows a class to inherit from a 
 
 ### Static Method
 
+If a subclass defines a static method with the same signature as a static method in the superclass, then the method in the subclass hides the one in the superclass.
+
+**Note:** The distinction between hiding a static method and overriding an instance method has important implications:
+
+- The version of the overridden instance method that gets invoked is the one in the subclass.
+- The version of the hidden static method that gets invoked depends on whether it is invoked from the superclass or the subclass.
 
 
-Example of **dynamic method dispatch(or dynamic method selection)** 
+Consider an example that contains two classes. The first is Animal, which contains one instance method and one static method:
 
 ```java
-interface Callee {
-    public void print();
-}
-
-class Callee1 implements Callee {
-    public void print() {
-        System.out.println("Callee1");
+public class Animal {
+    public static void testClassMethod() {
+        System.out.println("The static method in Animal");
+    }
+    public void testInstanceMethod() {
+        System.out.println("The instance method in Animal");
     }
 }
+```
 
-class Callee2 implements Callee {
-    public void print() {
-        System.out.println("Callee2");
+The second class, a subclass of Animal, is called Cat:
+
+```java
+public class Cat extends Animal {
+    public static void testClassMethod() {
+        System.out.println("The static method in Cat");
     }
-}
+    public void testInstanceMethod() {
+        System.out.println("The instance method in Cat");
+    }
 
-public class DogLauncher {
     public static void main(String[] args) {
-        Callee callee1 = new Callee1();
-        Callee callee2 = new Callee2();
-
-        Callee[] arr = new Callee[2];
-        arr[0] = callee1;
-        arr[1] = callee2;
-
-        for(Callee c : arr) {
-            c.print(); 
-            // output:
-            // Callee1
-            // Callee2
-        }
+        Cat myCat = new Cat();
+        Animal myAnimal = myCat;
+        Animal.testClassMethod();
+        myAnimal.testInstanceMethod();
     }
 }
 ```
 
-Note that in Java, dynamic method dispatch happens only for the object the method is called on(e.g. different subclass which inherited from same parent in an array type of the parent, calls same method), not for the parameter types of overloaded methods(example below).
+The Cat class overrides the instance method in Animal and hides the static method in Animal. The main method in this class creates an instance of Cat and invokes testClassMethod() on the class and testInstanceMethod() on the instance.
 
-```java
-interface Callee {
-    public void foo(Object o);
-    public void foo(String s);
-    public void foo(int i);
-}
+The output from this program is as follows:
 
-class CalleeImpl implements Callee {
-    public void foo(Object o) {
-        System.out.println("foo(Object o)");
-    }
-
-    public void foo(String s) {
-        System.out.println("foo(\"" + s + "\")");
-    }
-
-    public void foo(int i) {
-        System.out.println("foo(" + i + ")");
-    }
-}
-
-public static void main(String[] args) {
-    CalleeImpl callee = new CalleeImpl();
-    String s = "haha";
-    Object o = "haha";
-    
-    callee.foo(s); // output: foo("haha")
-    callee.foo(o); // output: foo(Object o)
-    
-    // method was selected depending on compilation-type, not runtime-type
-}
 ```
+The static method in Animal
+The instance method in Cat
+```
+
+As promised, the version of the hidden static method that gets invoked is the one in the superclass, and the version of the overridden instance method that gets invoked is the one in the subclass.
 
 ## Inheritance
 
@@ -274,7 +251,9 @@ public static void main(String[] args) {
     
     SList<Integer> sl = vsl;
     
-    sl.printLostItems(); // Compilation errors! Because sl is SList in compile-Time, and
+    sl.printLostItems(); 
+    // Compilation errors! Because sl is SList in compile-Time, and SList
+    // doesn't have method printLostItems().
 }
 ```
 
@@ -290,9 +269,85 @@ Object o2 = new ShowDog();
 ```java
 Object o2 = new ShowDog(); 
 Object o3 = (Dog)o2; 
-// Assignment works, because o2 has runtime type ShowDog, and ShowDog is inherited from Dog, i.e. ShowDog is subtype(or subclass) of Dog.
+// Assignment works, because o2 has runtime type ShowDog, and ShowDog is inherited from 
+// Dog, i.e. ShowDog is subtype(or subclass) of Dog.
 
 o3.bark()
+```
+
+## Polymophism and overloading
+
+Example of **dynamic method dispatch(or dynamic method selection)** 
+
+```java
+interface Callee {
+    public void print();
+}
+
+class Callee1 implements Callee {
+    public void print() {
+        System.out.println("Callee1");
+    }
+}
+
+class Callee2 implements Callee {
+    public void print() {
+        System.out.println("Callee2");
+    }
+}
+
+public class DogLauncher {
+    public static void main(String[] args) {
+        Callee callee1 = new Callee1();
+        Callee callee2 = new Callee2();
+
+        Callee[] arr = new Callee[2];
+        arr[0] = callee1;
+        arr[1] = callee2;
+
+        for(Callee c : arr) {
+            c.print(); 
+            // output:
+            // Callee1
+            // Callee2
+        }
+    }
+}
+```
+
+Note that in Java, dynamic method dispatch happens only for the object the method is called on(e.g. different subclass which inherited from same parent in an array type of the parent, calls same method), not for the parameter types of overloaded methods(example below).
+
+```java
+interface Callee {
+    public void foo(Object o);
+    public void foo(String s);
+    public void foo(int i);
+}
+
+class CalleeImpl implements Callee {
+    public void foo(Object o) {
+        System.out.println("foo(Object o)");
+    }
+
+    public void foo(String s) {
+        System.out.println("foo(\"" + s + "\")");
+    }
+
+    public void foo(int i) {
+        System.out.println("foo(" + i + ")");
+    }
+}
+
+public static void main(String[] args) {
+    CalleeImpl callee = new CalleeImpl();
+    String s = "haha";
+    Object o = "haha";
+    
+    callee.foo(s); // output: foo("haha")
+    callee.foo(o); // output: foo(Object o)
+    
+    // method was selected depending on compilation-type, not runtime-type
+}
 ```
 
 
