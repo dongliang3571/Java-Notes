@@ -258,21 +258,48 @@ public static void main(String[] args) {
 ```
 
 - Compiler allows memory box to hold any subtype
-
-```java
-Object o2 = new ShowDog(); 
-// Compiler won't give errors, because all class are inherited from Object implcitily
-```
-
 - Compiler allows calls based on static type
+- Overriden non-static methods are selected at runtime based on dynamic type(Check section of overriding and hiding method). 
 
 ```java
-Object o2 = new ShowDog(); 
-Object o3 = (Dog)o2; 
-// Assignment works, because o2 has runtime type ShowDog, and ShowDog is inherited from 
-// Dog, i.e. ShowDog is subtype(or subclass) of Dog.
+interface Callee {
+    public void print();
+}
 
-o3.bark()
+class Callee1 implements Callee {
+    public void print() {
+        System.out.println("Callee1");
+    }
+}
+
+class Callee2 implements Callee {
+    public void print() {
+        System.out.println("Callee2");
+    }
+}
+
+class Callee3 extends Callee2 {
+    public void print() {
+        System.out.println("Callee3");
+    }
+}
+
+public class DogLauncher {
+    public static void main(String[] args) {
+        Object o2 = new Callee3();
+        Callee3 c3 = (Callee3)o2;
+        c3.print(); // output: Callee3
+
+        Callee2 c2 = (Callee2)o2;   
+        c2.print(); // output: Callee3
+        // even we already casted it to Callee2, but indeed it was instantiated with Callee3
+        // so it will stay being Callee3 as runtime type forever in this program
+
+        Object o3 = (Callee2)o2;
+        o3.print();
+    }
+}
+
 ```
 
 ## Polymophism and overloading
