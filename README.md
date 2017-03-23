@@ -516,6 +516,37 @@ import static mypackage.MyConstants.*;
 
 ## Return Object
 
-In Java, You always return a reference (unless returned value is a primitive type such as int, float, char, ...).
+In Java, You always return a copy of reference (unless returned value is a primitive type such as int, float, char, ...).
 
 So, if you don't want the returned object to be modified, you must return a full copy of it (you could use Clonable interface and clone method if your class defines it). Or the object is designed to be immutable.
+
+## Bitwise operation
+
+**Operators:**
+
+With A = 60 = 0011 1100, B = 13 = 0000 1101,
+
+| Operator | Description | Example |
+|---|----|---|
+| & (bitwise and) | Binary AND Operator copies a bit to the result if it exists in both operands. | (A & B) will give 12 which is 0000 1100 |
+| | (bitwise or) | Binary OR Operator copies a bit if it exists in either operand.	| (A | B) will give 61 which is 0011 1101 |
+| ^ (bitwise XOR) | Binary XOR Operator copies the bit if it is set in one operand but not both. | (A ^ B) will give 49 which is 0011 0001 |
+| ~ (bitwise compliment) | Binary Ones Complement Operator is unary and has the effect of 'flipping' bits.	 | (~A ) will give -61 which is 1100 0011 in 2's complement form due to a signed binary number. |
+| << (left shift) | Binary Left Shift Operator. The left operands value is moved left by the number of bits specified by the right operand.	 | A << 2 will give 240 which is 1111 0000
+ |
+| >> (right shift) | Binary Right Shift Operator. The left operands value is moved right by the number of bits specified by the right operand. | A >> 2 will give 15 which is 1111 |
+| >>> (zero fill right shift) | Shift right zero fill operator. The left operands value is moved right by the number of bits specified by the right operand and shifted values are filled up with zeros.	 | A >>>2 will give 15 which is 0000 1111 |
+
+
+**Note: It apply to all primitives, but with `Numeric Promotion`, it will promote things to at least `int` first**
+
+```java
+byte b = 7;
+byte b = ~b;
+// will give a error of 'error: incompatible types: possible lossy conversion from int to byte'
+// because ~b is promoted to int
+// correct way to do it is to cast b to byte again
+// i.e.
+
+byte b = (byte)~b;
+```
