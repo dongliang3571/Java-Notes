@@ -555,7 +555,7 @@ byte b = (byte)~b;
 
 ## Java servlet
 
-(Life of a JSP file)[https://en.wikipedia.org/wiki/File:JSPLife.png#/media/File:JSPLife.png]
+[Life of a JSP file](https://en.wikipedia.org/wiki/File:JSPLife.png#/media/File:JSPLife.png)
 
 A Java servlet is a Java program that extends the capabilities of a server. Although servlets can respond to any types of requests, they most commonly implement applications hosted on Web servers.[1] Such Web servlets are the Java counterpart to other dynamic Web content technologies such as PHP and ASP.NET.
 
