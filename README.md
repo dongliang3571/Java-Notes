@@ -553,6 +553,8 @@ byte b = (byte)~b;
 
 ## Java Web Development
 
+[Introduction to Java Web Application Development](http://cse.csusb.edu/turner/java_web_programming/intro/)
+
 ## Java servlet
 
 [Life of a JSP file](https://en.wikipedia.org/wiki/File:JSPLife.png#/media/File:JSPLife.png)
