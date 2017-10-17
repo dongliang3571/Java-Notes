@@ -561,3 +561,6 @@ byte b = (byte)~b;
 
 A Java servlet is a Java program that extends the capabilities of a server. Although servlets can respond to any types of requests, they most commonly implement applications hosted on Web servers.[1] Such Web servlets are the Java counterpart to other dynamic Web content technologies such as PHP and ASP.NET.
 
+## Tomcat
+
+http://www.codejava.net/servers/tomcat/how-to-deploy-a-java-web-application-on-tomcat#DeployMethod2
