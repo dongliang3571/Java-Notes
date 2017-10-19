@@ -578,3 +578,9 @@ http://www.codejava.net/servers/tomcat/how-to-deploy-a-java-web-application-on-t
 I think it should be said that **Tomcat(Web container)** has it's own HTTP server built into it, and is fully functional at serving static content too. Depending on your java virtual machine configuration it can actually outperform going through traditional connectors in apache such as mod_proxy and mod_jk.
 
 That said a fully optimized Tomcat server should serve static files fast and if you have Java servlets, JSPs and ColdFusion files in addition to static content you may find tomcat does an excellent job by itself.
+
+### Web Server, Nginx
+
+**You can use Nginx as a reversed proxy in the front of Tomcat**
+
+In computer networks, a **reverse proxy** is a type of proxy server that retrieves resources on behalf of a client from one or more servers. These resources are then returned to the client as if they originated from the Web server itself
