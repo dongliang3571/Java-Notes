@@ -551,16 +551,20 @@ byte b = ~b;
 byte b = (byte)~b;
 ```
 
-## Java Web Development
+### Java Web Development
 
 [Introduction to Java Web Application Development](http://cse.csusb.edu/turner/java_web_programming/intro/)
 
-## Java servlet
+### Java servlet
 
 [Life of a JSP file](https://en.wikipedia.org/wiki/File:JSPLife.png#/media/File:JSPLife.png)
 
 A Java servlet is a Java program that extends the capabilities of a server. Although servlets can respond to any types of requests, they most commonly implement applications hosted on Web servers.[1] Such Web servlets are the Java counterpart to other dynamic Web content technologies such as PHP and ASP.NET.
 
-## Tomcat
+### Tomcat
 
 http://www.codejava.net/servers/tomcat/how-to-deploy-a-java-web-application-on-tomcat#DeployMethod2
+
+### Java EE Container > Java EE server > Web container > Servlet JSP , Enterprise JavaBeans (EJB) container > Enterprise Bean
+
+[ Java EE application components in the Java EE containers](http://docs.oracle.com/javaee/5/tutorial/doc/bnabo.html#bnabr)
