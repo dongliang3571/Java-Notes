@@ -568,3 +568,13 @@ http://www.codejava.net/servers/tomcat/how-to-deploy-a-java-web-application-on-t
 ### Java EE Container > Java EE server > Web container > Servlet JSP , Enterprise JavaBeans (EJB) container > Enterprise Bean
 
 [ Java EE application components in the Java EE containers](http://docs.oracle.com/javaee/5/tutorial/doc/bnabo.html#bnabr)
+
+### Difference between a web server and a appplication server 
+
+**web server** - serves files stored somewhere (most commonly .css, .html, .js). Common web servers are Apache, Nginx or even Python's SimpleHTTPServer.
+
+**application server** - serves files generated on the fly. Essentially most web servers have some sort of plugins or even come with built-in functionality to do that. There exist also strict application servers like Gunicorn (Python), Unicorn (Ruby), uWSGI (Python), etc
+
+I think it should be said that **Tomcat(Web container)** has it's own HTTP server built into it, and is fully functional at serving static content too. Depending on your java virtual machine configuration it can actually outperform going through traditional connectors in apache such as mod_proxy and mod_jk.
+
+That said a fully optimized Tomcat server should serve static files fast and if you have Java servlets, JSPs and ColdFusion files in addition to static content you may find tomcat does an excellent job by itself.
