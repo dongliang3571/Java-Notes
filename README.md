@@ -595,4 +595,11 @@ https://en.wikipedia.org/wiki/JDBC_driver
 
 https://en.wikipedia.org/wiki/Java_Database_Connectivity
 
+### Connect to MySql
+
 https://www.ntu.edu.sg/home/ehchua/programming/java/JDBC_Basic.html
+
+### Difference bettwen JDBC and ODBC
+
+https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
+https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
