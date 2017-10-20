@@ -97,6 +97,9 @@ for(Integer i : sets) {
 // 1
 // 2
 ```
+### Exception handling
+
+https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html
 
 ## Override and Hiding Methods
 
@@ -598,6 +601,10 @@ https://en.wikipedia.org/wiki/Java_Database_Connectivity
 ### Connect to MySql
 
 https://www.ntu.edu.sg/home/ehchua/programming/java/JDBC_Basic.html
+
+### Close database connecion
+
+https://stackoverflow.com/questions/2121805/problem-with-not-closing-db-connection-while-debugging
 
 ### Difference bettwen JDBC and ODBC
 
