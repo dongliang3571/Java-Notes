@@ -584,3 +584,15 @@ That said a fully optimized Tomcat server should serve static files fast and if 
 **You can use Nginx as a reversed proxy in the front of Tomcat**
 
 In computer networks, a **reverse proxy** is a type of proxy server that retrieves resources on behalf of a client from one or more servers. These resources are then returned to the client as if they originated from the Web server itself
+
+### Java Database Connectivity (JDBC)
+
+To put it simply: Java (J2SE/J2EE) provides `java.sql.*` as the standard way to connect to a database. The issue is that these classes do not really know how to connect to each specific database in the model, they are oriented to the programmer.
+
+To connecto to each database, you need to put in its Driver. The Oracle driver will know how to connect to the Oracle database, the mysql driver will know how to connect to MySQL. `java.sql` will know how to use each Driver, so by just using it you do not need to know the internals of each Driver.
+
+https://en.wikipedia.org/wiki/JDBC_driver
+
+https://en.wikipedia.org/wiki/Java_Database_Connectivity
+
+https://www.ntu.edu.sg/home/ehchua/programming/java/JDBC_Basic.html
