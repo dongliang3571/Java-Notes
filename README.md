@@ -101,6 +101,185 @@ for(Integer i : sets) {
 
 https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html
 
+**Checked Exception VS. Unchecked Exception**
+
+**Checked Exception:** are the exceptions that are checked at compile time. If some code within a method throws a checked exception, then the method must either handle the exception or it must specify the exception using throws keyword.
+
+For example, consider the following Java program that opens file at locatiobn “C:\test\a.txt” and prints first three lines of it. The program doesn’t compile, because the function main() uses FileReader() and FileReader() throws a checked exception FileNotFoundException. It also uses readLine() and close() methods, and these methods also throw checked exception IOException
+
+```java
+import java.io.*;
+ 
+class Main {
+    public static void main(String[] args) {
+        FileReader file = new FileReader("C:\\test\\a.txt");
+        BufferedReader fileInput = new BufferedReader(file);
+         
+        // Print first 3 lines of file "C:\test\a.txt"
+        for (int counter = 0; counter < 3; counter++) 
+            System.out.println(fileInput.readLine());
+         
+        fileInput.close();
+    }
+}
+```
+
+output:
+
+```
+Exception in thread "main" java.lang.RuntimeException: Uncompilable source code - 
+unreported exception java.io.FileNotFoundException; must be caught or declared to be 
+thrown
+	at Main.main(Main.java:5)
+ ```
+ 
+ To fix the above program, we either need to specify list of exceptions using throws, or we need to use try-catch block. We have used throws in the below program. Since FileNotFoundException is a subclass of IOException, we can just specify IOException in the throws list and make the above program compiler-error-free.
+
+```java
+import java.io.*;
+ 
+class Main {
+    public static void main(String[] args) throws IOException {
+        FileReader file = new FileReader("C:\\test\\a.txt");
+        BufferedReader fileInput = new BufferedReader(file);
+         
+        // Print first 3 lines of file "C:\test\a.txt"
+        for (int counter = 0; counter < 3; counter++) 
+            System.out.println(fileInput.readLine());
+         
+        fileInput.close();
+    }
+}
+```
+
+**Unchecked Exception:** are the exceptions that are not checked at compiled time. In C++, all exceptions are unchecked, so it is not forced by the compiler to either handle or specify the exception. It is up to the programmers to be civilized, and specify or catch the exceptions. In Java exceptions under `Error` and `RuntimeException` classes are unchecked exceptions, everything else under throwable is checked.
+
+```
+                   +-----------+
+		           | Throwable |
+                   +-----------+
+                    /         \
+		           /           \
+          +-------+          +-----------+
+          | Error |          | Exception |
+          +-------+          +-----------+
+	      /  |  \           / |        \
+         \________/	     \______/    	\
+			                             +------------------+
+          unchecked	     checked	     | RuntimeException |
+				                   	     +------------------+
+					                      /   |    |      \
+                    					 \_________________/
+					   
+					                          unchecked
+```
+
+Consider the following Java program. It compiles fine, but it throws ArithmeticException when run. The compiler allows it to compile, because ArithmeticException is an unchecked exception.
+
+```java
+class Main {
+   public static void main(String args[]) {
+      int x = 0;
+      int y = 10;
+      int z = y/x;
+  }
+}
+```
+
+Output:
+
+```
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at Main.main(Main.java:5)
+Java Result: 1
+```
+
+If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot do anything to recover from the exception, make it an unchecked exception
+
+```java
+// Note: This class will not compile yet.
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+
+public class ListOfNumbers {
+
+    private List<Integer> list;
+    private static final int SIZE = 10;
+
+    public ListOfNumbers () {
+        list = new ArrayList<Integer>(SIZE);
+        for (int i = 0; i < SIZE; i++) {
+            list.add(new Integer(i));
+        }
+    }
+
+    public void writeList() {
+	// The FileWriter constructor throws IOException, which must be caught.
+        PrintWriter out = new PrintWriter(new FileWriter("OutFile.txt"));
+
+        for (int i = 0; i < SIZE; i++) {
+            // The get(int) method throws IndexOutOfBoundsException, which must be caught.
+            out.println("Value at: " + i + " = " + list.get(i));
+        }
+        out.close();
+    }
+}
+```
+
+`new FileWriter("OutFile.txt")` is a call to a constructor. The constructor initializes an output stream on a file. If the file cannot be opened, the constructor throws an `IOException`. `list.get(i)` is a call to the `ArrayList` class's `get` method, which throws an `IndexOutOfBoundsException` if the value of its argument is too small (less than 0) or too large (more than the number of elements currently contained by the `ArrayList`).
+
+The class do not compile because we don't handle the exceptions, so to handle them we do:
+
+```
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+
+public class ListOfNumbers {
+
+    private List<Integer> list;
+    private static final int SIZE = 10;
+
+    public ListOfNumbers () {
+        list = new ArrayList<Integer>(SIZE);
+        for (int i = 0; i < SIZE; i++) {
+            list.add(new Integer(i));
+        }
+    }
+
+    public void writeList() {
+        PrintWriter out = null;
+        try {
+            System.out.println("Entered try statement");
+            out = new PrintWriter(new FileWriter("OutFile.txt"));
+            for (int i = 0; i < SIZE; i++) {
+                out.println("Value at: " + i + " = " + list.get(i));
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Caught IOException: " + e.getMessage());
+        }
+        
+        // or Catching More Than One Type of Exception with One Exception Handler
+        // catch (IndexOutOfBoundsException | IOException e) {
+        //      logger.log(e)
+        //      throw ex;
+        // }
+
+        finally {
+            if (out != null) { 
+                System.out.println("Closing PrintWriter");
+                out.close(); 
+            } else { 
+                System.out.println("PrintWriter not open");
+            } 
+        } 
+    }
+}
+```
+
 ## Override and Hiding Methods
 
 ### Instance Method
