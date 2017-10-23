@@ -789,3 +789,34 @@ https://stackoverflow.com/questions/2121805/problem-with-not-closing-db-connecti
 
 https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
 https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
+
+### Difference Between import and class.forName in java
+
+https://stackoverflow.com/questions/2092659/what-is-the-difference-between-class-forname-and-class-forname-newinstanc
+
+1 : `import`
+
+```
+==> loads the class when you call any instance of it or call anything by class reference
+==> loads the class when call is made
+```
+
+2 : `Class.forName("");`
+
+```
+==> loads the class in the jvm immediately
+```
+
+difference can be seen by if a class has static block
+
+```
+==> import will not call the static block
+==> Class.forName("") will call the static block
+```
+
+In JDBC earlier than 4.0 case
+
+```
+===> Driver class when loaded by Class.forName("") , executes its static block , which published the driver
+==> Simply importing the Driver class wont execute the static block and thus your Driver will not be published for connection objects to be created
+```
