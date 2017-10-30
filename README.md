@@ -820,3 +820,156 @@ In JDBC earlier than 4.0 case
 ===> Driver class when loaded by Class.forName("") , executes its static block , which published the driver
 ==> Simply importing the Driver class wont execute the static block and thus your Driver will not be published for connection objects to be created
 ```
+
+## Singleton
+
+In general we follow below steps to create a singleton class:
+
+- Override the private constructor to avoid any new object creation with new operator.
+- Declare a private static instance of the same class
+- Provide a public static method that will return the singleton class instance variable. If the variable is not initialized then initialize it or else simply return the instance variable.
+
+Using above steps I have created a singleton class that looks like below:
+
+```java
+
+public class ASingleton {
+
+	private static ASingleton instance = null;
+
+	private ASingleton() {
+	}
+
+	public static ASingleton getInstance() {
+		if (instance == null) {
+			instance = new ASingleton();
+		}
+		return instance;
+	}
+
+}
+```
+
+In the above code, getInstance() method is **NOT** thread safe. Multiple threads can access it at the same time and for the first few threads when the instance variable is not initialized, multiple threads can enters the if loop and create multiple instances and break our singleton implementation.
+
+1. Create the instance variable at the time of class loading.
+
+
+```java
+
+public class ASingleton {
+
+	private static ASingleton instance = new ASingleton;
+
+	private ASingleton() {
+	}
+
+	public static ASingleton getInstance() {
+		if (instance == null) {
+			instance = new ASingleton();
+		}
+		return instance;
+	}
+
+}
+```
+
+Pros:
+
+- Thread safety without synchronization
+- Easy to implement
+
+Cons:
+
+- Early creation of resource that might not be used in the application.
+- The client application can’t pass any argument, so we can’t reuse it. For example, having a generic singleton class for database connection where client application supplies database server properties.
+
+Another similar pattern:
+
+```java
+public class Singleton {
+    private Singleton() {
+        //lots of initialization code
+    }
+
+    private static class SingletonHolder { 
+        public static final Singleton instance = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return SingletonHolder.instance;
+    }
+}
+```
+
+
+2. Synchronize the getInstance() method
+
+[Synchronized Methods](https://docs.oracle.com/javase/tutorial/essential/concurrency/syncmeth.html)
+
+```java
+
+public class ASingleton {
+
+	private static ASingleton instance = null;
+
+	private ASingleton() {
+	}
+
+	public static synchronized ASingleton getInstance() { // Notice keyword `synchronized`
+		if (instance == null) {
+			instance = new ASingleton();
+		}
+		return instance;
+	}
+
+}
+```
+
+Pros:
+
+- Thread safety is guaranteed.
+- Client application can pass parameters
+- Lazy initialization achieved
+
+Cons:
+
+- Slow performance because of locking overhead.
+- Unnecessary synchronization that is not required once the instance variable is initialized.
+
+
+3. Use synchronized block inside the if loop
+
+[Intrinsic Locks and Synchronization](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html)
+
+```java
+public class ASingleton{
+
+	private static ASingleton instance= null;
+	private static Object mutex= new Object();
+	private ASingleton(){
+	}
+
+	public static ASingleton getInstance(){
+		if(instance==null){
+			synchronized (mutex){ // notice synchronized used here
+				if(instance==null) instance= new ASingleton();
+			}
+		}
+		return instance;
+	}
+
+}
+```
+
+Pros:
+
+- Thread safety is guaranteed
+- Client application can pass arguments
+- Lazy initialization achieved
+- Synchronization overhead is minimal and applicable only for first few threads when the variable is null.
+
+Cons:
+
+- Extra if condition
+
