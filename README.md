@@ -420,7 +420,77 @@ public class ShowDog extends Dog {
 }
 ```
 
+### Abstract Class
 
+An abstract class is a class that is declared `abstract`—it may or may not include abstract methods. Abstract classes cannot be instantiated, but they can be subclassed.
+
+If a class includes abstract methods, then the class itself must be declared abstract
+
+```java
+public abstract class GraphicObject {
+   // declare fields
+   // declare nonabstract methods
+   abstract void draw();
+}
+```
+
+One abstract class can be extended by another abstract class
+
+```java
+abstract class StaffMember {
+
+}
+
+abstract class Car extends StaffMember {
+
+}
+```
+
+In Java, an abstract class can implement an interface, and **not provide implementations** of all of the interface’s methods.  It is the responsibility of the first concrete class that has that abstract class as an ancestor to implement all of the methods in the interface.
+
+```java
+interface MyInterface {
+    public String hello = "Hello"; // By default it's final and static, e.g. public static final String hello = "Hello"
+    public void sayHello();
+}
+
+abstract class StaffMember implements MyInterface {
+    // No implementation of sayHello is fine
+}
+
+abstract class Car extends StaffMember {
+    // No implementation of sayHello is fine
+}
+```
+
+### Interface
+
+In the Java programming language, an interface is a reference type, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types. Method bodies exist only for default methods and static methods. 
+
+Interfaces **cannot** be instantiated—they can only be implemented by classes or extended by other interfaces
+
+Varibales declared in Interface are always `static` and `final` because interface cannot be instantiated. It doesn't make sense to let them have memeber variables.
+
+```java
+interface MyInterface {
+    public String hello = "Hello"; // By default it's final and static, e.g. public static final String hello = "Hello"
+}
+
+class Car implements MyInterface {
+
+}
+
+public class Solution {
+
+    public static void main(String[] args) {
+	System.out.println(MyInterface.hello); // print out Hello
+	System.out.println(Car.hello); // print out Hello, Car gets all variable from MyInterface
+        MyInterface.hello = "sdfdsf"; // Error, final variable cannot be changed
+	Car.hello = "sdfdsf"; // Error, final variable cannot be changed
+    }
+}
+
+```
 
 ## Casting
 
