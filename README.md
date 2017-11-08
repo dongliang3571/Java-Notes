@@ -479,6 +479,7 @@ public class DogLauncher {
 
         Object o3 = (Callee2)o2;
         o3.print();
+	// Error in compile-time type checking: because Object has no method print()
     }
 }
 
