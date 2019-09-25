@@ -21,7 +21,7 @@ The JIT compiler can be disabled, in which case the entire Java program will be 
 
 Importing library: `import java.util.List`.
 
-It's an iterface. `ArrayList`, `LinkedList` implement it.
+It's an interface. `ArrayList`, `LinkedList` implement it.
 
 
 ## ArrayList
