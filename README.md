@@ -112,6 +112,41 @@ for(Integer i : sets) {
 // 1
 // 2
 ```
+
+### Map and Set Hashing
+
+```java
+HashSet<String> set = new HashSet<String>();
+System.out.println(set.add(new String("123"))); // true
+System.out.println(set.add(new String("123"))); // false
+System.out.println(set.add("123")); // false
+
+HashSet<Integer> set = new HashSet<Integer>();
+System.out.println(set.add(new Integer(11))); // true
+System.out.println(set.add(new Integer(11))); // false
+System.out.println(set.add(11)); // false
+
+
+// custom object without overrding equals and hashCode
+class Tweet {
+    public int userId;
+    public int tweetId;
+
+    public Tweet(int userId, int tweetId) {
+        this.userId = userId;
+        this.tweetId = tweetId;
+    }
+}
+
+HashSet<Tweet> set = new HashSet<Tweet>();
+System.out.println(set.add(new Tweet(1, 2))); // true
+System.out.println(set.add(new Tweet(1, 2))); // true, because it uses Object's equals and hashCode
+
+// Solution is to override equals and hashCode
+https://dzone.com/articles/things-to-keep-in-mind-while-using-custom-classes
+
+```
+
 ### Exception handling
 
 https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html
