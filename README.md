@@ -1094,3 +1094,6 @@ Cons:
 
 - Extra if condition
 
+## Lambda expression
+
+https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
