@@ -206,22 +206,22 @@ class Main {
 
 ```
                    +-----------+
-		           | Throwable |
+		   | Throwable |
                    +-----------+
                     /         \
-		           /           \
+		   /           \
           +-------+          +-----------+
           | Error |          | Exception |
           +-------+          +-----------+
-	      /  |  \           / |        \
-         \________/	     \______/    	\
-			                             +------------------+
-          unchecked	     checked	     | RuntimeException |
-				                   	     +------------------+
-					                      /   |    |      \
-                    					 \_________________/
+	   /  |  \           / |        \
+         \________/	     \______/    \
+			                 +------------------+
+          unchecked	     checked	 | RuntimeException |
+				         +------------------+
+					   /   |    |      \
+                    		          \_________________/
 					   
-					                          unchecked
+					       unchecked
 ```
 
 Consider the following Java program. It compiles fine, but it throws ArithmeticException when run. The compiler allows it to compile, because ArithmeticException is an unchecked exception.
@@ -281,7 +281,7 @@ public class ListOfNumbers {
 
 The class do not compile because we don't handle the exceptions, so to handle them we do:
 
-```
+```java
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
