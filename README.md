@@ -265,11 +265,11 @@ public class ListOfNumbers {
     }
 
     public void writeList() {
-	// The FileWriter constructor throws IOException, which must be caught.
+	// The FileWriter constructor throws IOException, which is a checked exception and must be caught.
         PrintWriter out = new PrintWriter(new FileWriter("OutFile.txt"));
 
         for (int i = 0; i < SIZE; i++) {
-            // The get(int) method throws IndexOutOfBoundsException, which must be caught.
+            // The get(int) method throws IndexOutOfBoundsException, which is a unchecked exception
             out.println("Value at: " + i + " = " + list.get(i));
         }
         out.close();
