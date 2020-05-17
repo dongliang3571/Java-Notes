@@ -330,6 +330,22 @@ public class ListOfNumbers {
 }
 ```
 
+Or we can Specifying the Exceptions Thrown by a Method
+
+```java
+public void writeList() throws IOException, IndexOutOfBoundsException {
+	// ...code
+}
+```
+
+Remember that `IndexOutOfBoundsException` is an unchecked exception; including it in the throws clause is not mandatory. You could just write the following.
+
+```java
+public void writeList() throws IOException {
+	// ...code
+}
+```
+
 ## Override and Hiding Methods
 
 ### Instance Method
