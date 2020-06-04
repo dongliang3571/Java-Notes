@@ -1113,3 +1113,7 @@ Cons:
 ## Lambda expression
 
 https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
+
+## Annotation
+
+https://medium.com/@dmi3coder/pythons-decorators-vs-java-s-annotations-same-thing-2b1ef12e4dc5#:~:text=Annotation%20is%2C%20in%20simple%20words,some%20work%2C%20read%20this%20metadata.&text=So%20Java's%20annotation%20just%20adds,modify%20usage%20of%20the%20function.
