@@ -346,6 +346,18 @@ public void writeList() throws IOException {
 }
 ```
 
+### Why checked and unchecked exceptions
+
+Checked exceptions extend java.lang.Exception, while unchecked exceptions extend java.lang.RuntimeException, or java.lang.Error.
+
+Exception extends java.lang.Throwable, while RuntimeException extends Exception, and Error, like Exception, extends java.lang.Throwable.
+
+When deciding whether you should be using a checked vs. unchecked exception, always remember these rules:
+
+ExceptionS are cases an application would want to handle.
+RuntimeExceptionS are cases you (usually) can't handle, due to programming error. You shouldn't catch RuntimeExceptionS, they should be targeted in your unit testing, and fixed in your production code.
+ErrorS are cases you can't handle because of critical errors, such as system problems (e.g. file system has failed). You shouldn't ever throw, catch or subclass an Error, unless you're building something such as a compiler for the JVM.
+
 ## Override and Hiding Methods
 
 ### Instance Method
