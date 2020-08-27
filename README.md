@@ -348,6 +348,8 @@ public void writeList() throws IOException {
 
 ### Why checked and unchecked exceptions
 
+https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html
+
 Checked exceptions extend java.lang.Exception, while unchecked exceptions extend java.lang.RuntimeException, or java.lang.Error.
 
 Exception extends java.lang.Throwable, while RuntimeException extends Exception, and Error, like Exception, extends java.lang.Throwable.
