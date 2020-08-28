@@ -1,7 +1,7 @@
 # Java-Notes
 Some Java Notes
 
-## Just-In-Time(JIT) Overview
+### Just-In-Time(JIT) Overview
 
 The Just-In-Time (JIT) compiler is a component of the Java™ Runtime Environment that improves the performance of Java applications at run time.
 
@@ -17,26 +17,26 @@ After a method is compiled, its call count is reset to zero and subsequent calls
 
 The JIT compiler can be disabled, in which case the entire Java program will be interpreted. Disabling the JIT compiler is not recommended except to diagnose or work around JIT compilation problems.
 
-## List
+### List
 
 Importing library: `import java.util.List`.
 
 It's an interface. `ArrayList`, `LinkedList` implement it.
 
 
-## ArrayList
+### ArrayList
 
 Importing library: `import java.util.ArrayList`
 
 Implements `List`
 
-## LinkedList
+### LinkedList
 
 Importing library: `import java.util.LinkedList`
 
 Implements `List`
 
-## LinkedList VS. ArrayList
+### LinkedList VS. ArrayList
 
 | LinkedList                               | ArrayList                          |
 | -----------------------------------      | ---------------------------------- |
@@ -50,7 +50,7 @@ Implements `List`
 | Fail-fast                                | same                               |
 
 
-## Iteration for `Map` and `Set`
+### Iteration for `Map` and `Set`
 
 - for `Map`
 
@@ -159,16 +159,16 @@ For example, consider the following Java program that opens file at locatiobn �
 
 ```java
 import java.io.*;
- 
+
 class Main {
     public static void main(String[] args) {
         FileReader file = new FileReader("C:\\test\\a.txt");
         BufferedReader fileInput = new BufferedReader(file);
-         
+
         // Print first 3 lines of file "C:\test\a.txt"
-        for (int counter = 0; counter < 3; counter++) 
+        for (int counter = 0; counter < 3; counter++)
             System.out.println(fileInput.readLine());
-         
+
         fileInput.close();
     }
 }
@@ -177,26 +177,26 @@ class Main {
 output:
 
 ```
-Exception in thread "main" java.lang.RuntimeException: Uncompilable source code - 
-unreported exception java.io.FileNotFoundException; must be caught or declared to be 
+Exception in thread "main" java.lang.RuntimeException: Uncompilable source code -
+unreported exception java.io.FileNotFoundException; must be caught or declared to be
 thrown
 	at Main.main(Main.java:5)
  ```
- 
+
  To fix the above program, we either need to specify list of exceptions using throws, or we need to use try-catch block. We have used throws in the below program. Since FileNotFoundException is a subclass of IOException, we can just specify IOException in the throws list and make the above program compiler-error-free.
 
 ```java
 import java.io.*;
- 
+
 class Main {
     public static void main(String[] args) throws IOException {
         FileReader file = new FileReader("C:\\test\\a.txt");
         BufferedReader fileInput = new BufferedReader(file);
-         
+
         // Print first 3 lines of file "C:\test\a.txt"
-        for (int counter = 0; counter < 3; counter++) 
+        for (int counter = 0; counter < 3; counter++)
             System.out.println(fileInput.readLine());
-         
+
         fileInput.close();
     }
 }
@@ -220,7 +220,7 @@ class Main {
 				         +------------------+
 					   /   |    |      \
                     		          \_________________/
-					   
+
 					       unchecked
 ```
 
@@ -311,7 +311,7 @@ public class ListOfNumbers {
         } catch (IOException e) {
             System.err.println("Caught IOException: " + e.getMessage());
         }
-        
+
         // or Catching More Than One Type of Exception with One Exception Handler
         // catch (IndexOutOfBoundsException | IOException e) {
         //      logger.log(e)
@@ -319,13 +319,13 @@ public class ListOfNumbers {
         // }
 
         finally {
-            if (out != null) { 
+            if (out != null) {
                 System.out.println("Closing PrintWriter");
-                out.close(); 
-            } else { 
+                out.close();
+            } else {
                 System.out.println("PrintWriter not open");
-            } 
-        } 
+            }
+        }
     }
 }
 ```
@@ -360,7 +360,7 @@ ExceptionS are cases an application would want to handle.
 RuntimeExceptionS are cases you (usually) can't handle, due to programming error. You shouldn't catch RuntimeExceptionS, they should be targeted in your unit testing, and fixed in your production code.
 ErrorS are cases you can't handle because of critical errors, such as system problems (e.g. file system has failed). You shouldn't ever throw, catch or subclass an Error, unless you're building something such as a compiler for the JVM.
 
-## Override and Hiding Methods
+### Override and Hiding Methods
 
 ### Instance Method
 
@@ -423,7 +423,7 @@ The instance method in Cat
 
 As promised, the version of the hidden static method that gets invoked is the one in the superclass, and the version of the overridden instance method that gets invoked is the one in the subclass.
 
-## Inheritance
+### Inheritance
 
 
 Assume we have class `Dog` and `ShowDog`, and `ShowDog` is inherited from `Dog`.
@@ -446,16 +446,16 @@ public class ShowDog extends Dog {
         System.out.println("As a dog, I say: ");
         bark();
     }
-    
+
     public static void main(String[] args) {
         ShowDog sd = new ShowDog();
-        sd.barkMany(3); 
-        // output: 
-        // As a dog, I say: 
-        // Dog 
-        // Dog 
+        sd.barkMany(3);
+        // output:
+        // As a dog, I say:
         // Dog
-        
+        // Dog
+        // Dog
+
         // will call overriding barkMany, and inside barkMany, bark() will be Dog's bark(), because ShowDog is
         // inheried from Dog.
     }
@@ -482,18 +482,18 @@ public class ShowDog extends Dog {
         System.out.println("As a dog, I say: ");
         bark();
     }
-    
+
     public static void main(String[] args) {
         ShowDog sd = new ShowDog();
-        sd.barkMany(3); 
-        // output: 
-        // As a dog, I say: 
+        sd.barkMany(3);
+        // output:
+        // As a dog, I say:
         // As a dog, I say:
         // As a dog, I say:
         // As a dog, I say:
         // ........
         // error!
-        
+
         // will call overriding barkMany, and inside barkMany, bark() will be Dog's bark(), but inside bark(),
         // ShowDog's barkMany() will be called. Because the runtime type for sd is ShowDog, not Dog.
     }
@@ -545,7 +545,7 @@ abstract class Car extends StaffMember {
 
 ### Interface
 
-In the Java programming language, an interface is a reference type, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types. Method bodies exist only for default methods and static methods. 
+In the Java programming language, an interface is a reference type, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types. Method bodies exist only for default methods and static methods.
 
 Interfaces **cannot** be instantiated—they can only be implemented by classes or extended by other interfaces
 
@@ -572,6 +572,41 @@ public class Solution {
 
 ```
 
+### Abstract vs. Interface
+
+1. Main difference is methods of a Java interface are implicitly abstract and cannot have implementations. A Java abstract class can have instance methods that implements a default behavior.
+2. Variables declared in a Java interface is by default final. An  abstract class may contain non-final variables.
+3. Members of a Java interface are public by default. A Java abstract class can have the usual flavors of class members like private, protected, etc..
+4. Java interface should be implemented using keyword “implements”; A Java abstract class should be extended using keyword “extends”.
+5. An interface can extend another Java interface only, an abstract class can extend another Java class and implement multiple Java interfaces.
+6. A Java class can implement multiple interfaces but it can extend only one abstract class.
+7. Interface is absolutely abstract and cannot be instantiated; A Java abstract class also cannot be instantiated, but can be invoked if a main() exists.
+8. In comparison with java abstract classes, java interfaces are slow as it requires extra indirection.
+
+
+### Access Modifiers
+
+https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html#:~:text=The%20private%20modifier%20specifies%20that,its%20class%20in%20another%20package.
+
+Access level modifiers determine whether other classes can use a particular field or invoke a particular method. There are two levels of access control:
+
+- At the top level, like class — public, or package-private (no explicit modifier).
+- At the member level, like member method — public, private, protected, or package-private (no explicit modifier).
+
+A class may be declared with the modifier public, in which case that class is visible to all classes everywhere. If a class has no modifier (the default, also known as package-private), it is visible only within its own package (packages are named groups of related classes — you will learn about them in a later lesson.)
+
+At the member level, you can also use the public modifier or no modifier (package-private) just as with top-level classes, and with the same meaning. For members, there are two additional access modifiers: private and protected. The private modifier specifies that the member can only be accessed in its own class. The protected modifier specifies that the member can only be accessed within its own package (as with package-private) and, in addition, by a subclass of its class in another package.
+
+The following table shows the access to members permitted by each modifier.
+
+| Modifier  | Class | Package | Subclass | World |
+|-----------|-------|---------|----------|-------|
+|  public   |   Y   |    Y    |     Y    |   Y   |
+| protected |   Y   |    Y    |     Y    |   N   |
+|no modifier|   Y   |    Y    |     N    |   N   |
+|  private  |   Y   |    N    |     N    |   N   |
+
+
 ## Casting
 
 ### Compile-Time Type Checking
@@ -580,10 +615,10 @@ public class Solution {
 public static void main(String[] args) {
     VengefulSList<Integer> vsl = new VengefulSList<Integer>(9);
     vsl.insertBack(50);
-    
+
     SList<Integer> sl = vsl;
-    
-    sl.printLostItems(); 
+
+    sl.printLostItems();
     // Compilation errors! Because sl is SList in compile-Time, and SList
     // doesn't have method printLostItems().
 }
@@ -591,7 +626,7 @@ public static void main(String[] args) {
 
 - Compiler allows memory box to hold any subtype
 - Compiler allows calls based on static type
-- Overriden non-static methods are selected at runtime based on dynamic type(Check section of overriding and hiding method). 
+- Overriden non-static methods are selected at runtime based on dynamic type(Check section of overriding and hiding method).
 
 ```java
 interface Callee {
@@ -622,7 +657,7 @@ public class DogLauncher {
         Callee3 c3 = (Callee3)o2;
         c3.print(); // output: Callee3
 
-        Callee2 c2 = (Callee2)o2;   
+        Callee2 c2 = (Callee2)o2;
         c2.print(); // output: Callee3
         // even we already casted it to Callee2, but indeed it was instantiated with Callee3
         // so it will stay being Callee3 as runtime type forever in this program
@@ -637,7 +672,7 @@ public class DogLauncher {
 
 ## Polymophism and overloading
 
-Example of **dynamic method dispatch(or dynamic method selection)** 
+Example of **dynamic method dispatch(or dynamic method selection)**
 
 ```java
 interface Callee {
@@ -666,7 +701,7 @@ public class DogLauncher {
         arr[1] = callee2;
 
         for(Callee c : arr) {
-            c.print(); 
+            c.print();
             // output:
             // Callee1
             // Callee2
@@ -702,10 +737,10 @@ public static void main(String[] args) {
     CalleeImpl callee = new CalleeImpl();
     String s = "haha";
     Object o = "haha";
-    
+
     callee.foo(s); // output: foo("haha")
     callee.foo(o); // output: foo(Object o)
-    
+
     // method was selected depending on compilation-type, not runtime-type
 }
 ```
@@ -902,7 +937,7 @@ http://www.codejava.net/servers/tomcat/how-to-deploy-a-java-web-application-on-t
 
 [ Java EE application components in the Java EE containers](http://docs.oracle.com/javaee/5/tutorial/doc/bnabo.html#bnabr)
 
-### Difference between a web server and a appplication server 
+### Difference between a web server and a appplication server
 
 **web server** - serves files stored somewhere (most commonly .css, .html, .js). Common web servers are Apache, Nginx or even Python's SimpleHTTPServer.
 
@@ -1043,7 +1078,7 @@ public class Singleton {
         //lots of initialization code
     }
 
-    private static class SingletonHolder { 
+    private static class SingletonHolder {
         public static final Singleton instance = new Singleton();
     }
 
