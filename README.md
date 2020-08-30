@@ -1166,3 +1166,51 @@ https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
 ## Annotation
 
 https://medium.com/@dmi3coder/pythons-decorators-vs-java-s-annotations-same-thing-2b1ef12e4dc5#:~:text=Annotation%20is%2C%20in%20simple%20words,some%20work%2C%20read%20this%20metadata.&text=So%20Java's%20annotation%20just%20adds,modify%20usage%20of%20the%20function.
+
+https://docs.oracle.com/javase/tutorial/java/annotations/predefined.html
+
+## wildcard
+
+`?` is wildcard, we can see them in `Class<?>`
+
+https://stackoverflow.com/questions/9921676/what-does-class-mean-in-java
+https://en.wikipedia.org/wiki/Wildcard_%28Java%29
+
+## Difference betwee wildcard(`?`) and `T`?
+
+https://www.quora.com/What-is-the-difference-between-using-T-and-a-wildcard-in-Java-Generics#:~:text=If%20you%20have%20only%20one,parameters%20just%20support%20upper%20bounds.
+
+There are certain places, where wildcards, and type parameters do the same thing. But there are also certain places, where you have to use type parameters.
+
+If you want to enforce some relationship on the different types of method arguments, you can't do that with wildcards, you have to use type parameters.
+suppose you want to ensure that the src and dest list passed to copy() method should be of same parameterized type, you can do it with type parameters like so:
+
+```java
+public static <T extends Number> void copy(List<T> dest, List<T> src) 
+```
+
+Here, you are ensured that both dest and src have same parameterized type for List. So, it's safe to copy elements from src to dest.
+
+But, if you go on to change the method to use wildcard:
+
+```java
+public static void copy(List<? extends Number> dest, List<? extends Number> src) 
+```
+
+it won't work as expected. In 2nd case, you can pass `List<Integer>` and `List<Float>` as dest and src. So, moving elements from src to dest wouldn't be type safe anymore. If you don't need such kind of relation, then you are free not to use type parameters at all.
+
+Some other difference between using wildcards and type parameters are:
+
+1. If you have only one parameterized type argument, then you can use wildcard, although type parameter will also work.
+Type parameters support multiple bounds, wildcards don't.
+2. Wildcards support both upper and lower bounds, type parameters just support upper bounds. So, if you want to define a method that takes a List of type Integer or it's super class, you can do:
+
+```java
+public void print(List<? super Integer> list) // OK
+```
+
+but you can't use type parameter:
+
+```java
+ public <T super Integer> void print(List<T> list) // Won't compile
+ ```
