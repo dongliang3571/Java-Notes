@@ -947,7 +947,7 @@ I think it should be said that **Tomcat(Web container)** has it's own HTTP serve
 
 That said a fully optimized Tomcat server should serve static files fast and if you have Java servlets, JSPs and ColdFusion files in addition to static content you may find tomcat does an excellent job by itself.
 
-### Web Server, Nginx
+## Web Server, Nginx
 
 **You can use Nginx as a reversed proxy in the front of Tomcat**
 
@@ -971,9 +971,25 @@ https://www.ntu.edu.sg/home/ehchua/programming/java/JDBC_Basic.html
 
 https://stackoverflow.com/questions/2121805/problem-with-not-closing-db-connection-while-debugging
 
+### JDBC vs JPA
+
+In layman's terms:
+
+JDBC is a standard for Database Access
+JPA is a standard for ORM
+
+JDBC is a standard for connecting to a DB directly and running SQL against it - e.g SELECT * FROM USERS, etc. Data sets can be returned which you can handle in your app, and you can do all the usual things like INSERT, DELETE, run stored procedures, etc. It is one of the underlying technologies behind most Java database access (including JPA providers).
+
+One of the issues with traditional JDBC apps is that you can often have some crappy code where lots of mapping between data sets and objects occur, logic is mixed in with SQL, etc.
+
+JPA is a standard for Object Relational Mapping. This is a technology which allows you to map between objects in code and database tables. This can "hide" the SQL from the developer so that all they deal with are Java classes, and the provider allows you to save them and load them magically. Mostly, XML mapping files or annotations on getters and setters can be used to tell the JPA provider which fields on your object map to which fields in the DB. The most famous JPA provider is Hibernate, so it's a good place to start for concrete examples.
+
+Other examples include OpenJPA, toplink, etc.
+
+Under the hood, Hibernate and most other providers for JPA write SQL and use JDBC to read and write from and to the DB.
+
 ### Difference bettwen JDBC and ODBC
 
-https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
 https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
 
 ### Difference Between import and class.forName in java
@@ -1045,7 +1061,7 @@ In the above code, getInstance() method is **NOT** thread safe. Multiple threads
 
 public class ASingleton {
 
-	private static ASingleton instance = new ASingleton;
+	private static ASingleton instance = new ASingleton();
 
 	private ASingleton() {
 	}
@@ -1235,7 +1251,7 @@ If you want to enforce some relationship on the different types of method argume
 suppose you want to ensure that the src and dest list passed to copy() method should be of same parameterized type, you can do it with type parameters like so:
 
 ```java
-public static <T extends Number> void copy(List<T> dest, List<T> src) 
+public static <T extends Number> void copy(List<T> dest, List<T> src)
 ```
 
 Here, you are ensured that both dest and src have same parameterized type for List. So, it's safe to copy elements from src to dest.
@@ -1243,7 +1259,7 @@ Here, you are ensured that both dest and src have same parameterized type for Li
 But, if you go on to change the method to use wildcard:
 
 ```java
-public static void copy(List<? extends Number> dest, List<? extends Number> src) 
+public static void copy(List<? extends Number> dest, List<? extends Number> src)
 ```
 
 it won't work as expected. In 2nd case, you can pass `List<Integer>` and `List<Float>` as dest and src. So, moving elements from src to dest wouldn't be type safe anymore. If you don't need such kind of relation, then you are free not to use type parameters at all.
@@ -1263,3 +1279,7 @@ but you can't use type parameter:
 ```java
  public <T super Integer> void print(List<T> list) // Won't compile
  ```
+
+## Optional
+
+https://stackify.com/optional-java/
