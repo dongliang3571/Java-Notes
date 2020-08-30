@@ -1169,6 +1169,46 @@ https://medium.com/@dmi3coder/pythons-decorators-vs-java-s-annotations-same-thin
 
 https://docs.oracle.com/javase/tutorial/java/annotations/predefined.html
 
+In the Java Collections Framework, the class `List<MyClass>` represents an ordered collection of objects of type `MyClass`. Upper bounds are specified using extends: A `List<? extends MyClass>` is a list of objects of some subclass of `MyClass`, i.e. any object in the list is guaranteed to be of type `MyClass`, so one can iterate over it using a variable of type `MyClass`
+
+```java
+public void doSomething(List<? extends MyClass> list) { // MyClass is parent class, ? is child class
+    for (MyClass object : list) { // OK, because iterate over parent class
+        // do something
+    }
+}
+```
+
+However, it is not guaranteed that one can add any object of type `MyClass` to that list:
+
+```java
+public void doSomething(List<? extends MyClass> list) { // MyClass is parent class, ? is child class
+    MyClass m = new MyClass();
+    list.add(m); // Compile error, list can be a list of child classes, adding parent can be errors
+}
+```
+
+The converse is true for lower bounds, which are specified using super: A List<? super MyClass> is a list of objects of some superclass of MyClass, i.e. the list is guaranteed to be able to contain any object of type MyClass, so one can add any object of type MyClass:
+
+```java
+public void doSomething(List<? super MyClass> list) { // MyClass is child class, ? is parent
+    MyClass m = new MyClass();
+    list.add(m); // OK
+}
+```
+
+However, it is not guaranteed that one can iterate over that list using a variable of type MyClass:
+
+```java
+public void doSomething(List<? super MyClass> list) { // MyClass is child class, ? is parent
+    for (MyClass object : list) { // Compile error
+        // do something
+    }
+}
+```
+
+In order to be able to do both add objects of type MyClass to the list and iterate over it using a variable of type MyClass, a List<MyClass> is needed, which is the only type of List that is both List<? extends MyClass> and List<? super MyClass>
+
 ## wildcard
 
 `?` is wildcard, we can see them in `Class<?>`
