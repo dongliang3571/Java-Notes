@@ -1209,6 +1209,15 @@ public void doSomething(List<? super MyClass> list) { // MyClass is child class,
 
 In order to be able to do both add objects of type MyClass to the list and iterate over it using a variable of type MyClass, a List<MyClass> is needed, which is the only type of List that is both List<? extends MyClass> and List<? super MyClass>
 
+## Create an Annotation
+
+https://www.baeldung.com/java-custom-annotation
+
+https://github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-annotations/src/main/java/com/baeldung/customannotations/ObjectToJsonConverter.java
+
+
+
+
 ## wildcard
 
 `?` is wildcard, we can see them in `Class<?>`
