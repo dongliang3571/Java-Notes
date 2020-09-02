@@ -988,9 +988,75 @@ Other examples include OpenJPA, toplink, etc.
 
 Under the hood, Hibernate and most other providers for JPA write SQL and use JDBC to read and write from and to the DB.
 
+### DAO
+
+https://www.baeldung.com/java-dao-pattern#:~:text=The%20Data%20Access%20Object%20(DAO,mechanism)%20using%20an%20abstract%20API.
+
+The Data Access Object (DAO) pattern is a structural pattern that allows us to isolate the application/business layer from the persistence layer (usually a relational database, but it could be any other persistence mechanism) using an abstract API.
+
+The functionality of this API is to hide from the application all the complexities involved in performing CRUD operations in the underlying storage mechanism. This permits both layers to evolve separately without knowing anything about each other.
+
+### DAO vs Repository
+
+https://blog.sapiensworks.com/post/2012/11/01/Repository-vs-DAO.aspx
+
+Back to Repository and DAO, in conclusion, they have similar intentions only that the Repository is a higher level concept dealing directly with business/domain objects, while DAO is more lower level, closer to the database/storage dealing only with data. A (micro)ORM is a DAO that is used by a Repository. For data-centric apps, a repository and DAO are interchangeable because the 'business' objects are simple data.
+
+https://medium.com/@vngphm/repositories-pattern-vs-dao-pattern-765470e73cf3
+
+DAO maps to a table, if in a controller, you need to access two tables, one is local, the other is a rest API, you can create a Respository that read both DAOs and aggregate them together.
+
+You can also have a Service in front of Respository.
+
+So the level would be (in case of model Order)
+
+- OrderController
+- OrderService
+- OrderRepository ----------
+                            |---> together can be an unit of work
+- OrderDAO -----------------
+- JPA/EntityManager (Hibernet)
+- JDBC
+- Database
+
+
+### Bootstrapping JPA Programmatically in Java
+
+https://www.baeldung.com/java-bootstrap-jpa
+
+### Hibernate
+
+https://docs.jboss.org/hibernate/orm/4.0/devguide/en-US/html/ch01.html
+
+### DBCP
+
+database connection pooling
+
+https://commons.apache.org/proper/commons-dbcp/download_dbcp.cgi
+
 ### Difference bettwen JDBC and ODBC
 
 https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
+
+### Difference between EntityManagerFactory and SessionFactory in Hibernate
+
+https://stackoverflow.com/questions/5640778/hibernate-sessionfactory-vs-jpa-entitymanagerfactory
+
+### Spring Boot Hibernate example
+
+https://java2blog.com/spring-boot-hibernate-example/
+
+### @SpringBootApplication annotation
+
+The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes.
+
+### CreatedOn and UpdatedOn with Hibernate
+
+https://stackoverflow.com/questions/221611/creation-timestamp-and-last-update-timestamp-with-hibernate-and-mysql
+
+### Use auto-increment primary key using hibernate
+
+https://thorben-janssen.com/hibernate-tips-use-auto-incremented-column-primary-key/#:~:text=If%20you%20want%20to%20use,IDENTITY.&text=If%20you%20now%20persist%20a,generate%20the%20primary%20key%20value.
 
 ### Difference Between import and class.forName in java
 
@@ -1022,6 +1088,14 @@ In JDBC earlier than 4.0 case
 ===> Driver class when loaded by Class.forName("") , executes its static block , which published the driver
 ==> Simply importing the Driver class wont execute the static block and thus your Driver will not be published for connection objects to be created
 ```
+
+### Spring boot with JSP
+
+https://htr3n.github.io/2018/12/jsp-spring-boot/
+
+### @RequestBody && @ResponseBody
+
+https://www.baeldung.com/spring-request-response-body
 
 ## Singleton
 
@@ -1283,3 +1357,12 @@ but you can't use type parameter:
 ## Optional
 
 https://stackify.com/optional-java/
+
+
+## Spring
+
+### Spring IoC/Context/BeanFactory
+
+### Spring Data
+
+### stream with spring cloud stream
