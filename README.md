@@ -953,150 +953,6 @@ That said a fully optimized Tomcat server should serve static files fast and if 
 
 In computer networks, a **reverse proxy** is a type of proxy server that retrieves resources on behalf of a client from one or more servers. These resources are then returned to the client as if they originated from the Web server itself
 
-### Java Database Connectivity (JDBC)
-
-To put it simply: Java (J2SE/J2EE) provides `java.sql.*` as the standard way to connect to a database. The issue is that these classes do not really know how to connect to each specific database in the model, they are oriented to the programmer.
-
-To connecto to each database, you need to put in its Driver. The Oracle driver will know how to connect to the Oracle database, the mysql driver will know how to connect to MySQL. `java.sql` will know how to use each Driver, so by just using it you do not need to know the internals of each Driver.
-
-https://en.wikipedia.org/wiki/JDBC_driver
-
-https://en.wikipedia.org/wiki/Java_Database_Connectivity
-
-### Connect to MySql
-
-https://www.ntu.edu.sg/home/ehchua/programming/java/JDBC_Basic.html
-
-### Close database connecion
-
-https://stackoverflow.com/questions/2121805/problem-with-not-closing-db-connection-while-debugging
-
-### JDBC vs JPA
-
-In layman's terms:
-
-JDBC is a standard for Database Access
-JPA is a standard for ORM
-
-JDBC is a standard for connecting to a DB directly and running SQL against it - e.g SELECT * FROM USERS, etc. Data sets can be returned which you can handle in your app, and you can do all the usual things like INSERT, DELETE, run stored procedures, etc. It is one of the underlying technologies behind most Java database access (including JPA providers).
-
-One of the issues with traditional JDBC apps is that you can often have some crappy code where lots of mapping between data sets and objects occur, logic is mixed in with SQL, etc.
-
-JPA is a standard for Object Relational Mapping. This is a technology which allows you to map between objects in code and database tables. This can "hide" the SQL from the developer so that all they deal with are Java classes, and the provider allows you to save them and load them magically. Mostly, XML mapping files or annotations on getters and setters can be used to tell the JPA provider which fields on your object map to which fields in the DB. The most famous JPA provider is Hibernate, so it's a good place to start for concrete examples.
-
-Other examples include OpenJPA, toplink, etc.
-
-Under the hood, Hibernate and most other providers for JPA write SQL and use JDBC to read and write from and to the DB.
-
-### DAO
-
-https://www.baeldung.com/java-dao-pattern#:~:text=The%20Data%20Access%20Object%20(DAO,mechanism)%20using%20an%20abstract%20API.
-
-The Data Access Object (DAO) pattern is a structural pattern that allows us to isolate the application/business layer from the persistence layer (usually a relational database, but it could be any other persistence mechanism) using an abstract API.
-
-The functionality of this API is to hide from the application all the complexities involved in performing CRUD operations in the underlying storage mechanism. This permits both layers to evolve separately without knowing anything about each other.
-
-### DAO vs Repository
-
-https://blog.sapiensworks.com/post/2012/11/01/Repository-vs-DAO.aspx
-
-Back to Repository and DAO, in conclusion, they have similar intentions only that the Repository is a higher level concept dealing directly with business/domain objects, while DAO is more lower level, closer to the database/storage dealing only with data. A (micro)ORM is a DAO that is used by a Repository. For data-centric apps, a repository and DAO are interchangeable because the 'business' objects are simple data.
-
-https://medium.com/@vngphm/repositories-pattern-vs-dao-pattern-765470e73cf3
-
-DAO maps to a table, if in a controller, you need to access two tables, one is local, the other is a rest API, you can create a Respository that read both DAOs and aggregate them together.
-
-You can also have a Service in front of Respository.
-
-So the level would be (in case of model Order)
-
-- OrderController
-- OrderService
-- OrderRepository ----------
-                            |---> together can be an unit of work
-- OrderDAO -----------------
-- JPA/EntityManager (Hibernet)
-- JDBC
-- Database
-
-
-### Bootstrapping JPA Programmatically in Java
-
-https://www.baeldung.com/java-bootstrap-jpa
-
-### Hibernate
-
-https://docs.jboss.org/hibernate/orm/4.0/devguide/en-US/html/ch01.html
-
-### DBCP
-
-database connection pooling
-
-https://commons.apache.org/proper/commons-dbcp/download_dbcp.cgi
-
-### Difference bettwen JDBC and ODBC
-
-https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
-
-### Difference between EntityManagerFactory and SessionFactory in Hibernate
-
-https://stackoverflow.com/questions/5640778/hibernate-sessionfactory-vs-jpa-entitymanagerfactory
-
-### Spring Boot Hibernate example
-
-https://java2blog.com/spring-boot-hibernate-example/
-
-### @SpringBootApplication annotation
-
-The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes.
-
-### CreatedOn and UpdatedOn with Hibernate
-
-https://stackoverflow.com/questions/221611/creation-timestamp-and-last-update-timestamp-with-hibernate-and-mysql
-
-### Use auto-increment primary key using hibernate
-
-https://thorben-janssen.com/hibernate-tips-use-auto-incremented-column-primary-key/#:~:text=If%20you%20want%20to%20use,IDENTITY.&text=If%20you%20now%20persist%20a,generate%20the%20primary%20key%20value.
-
-### Difference Between import and class.forName in java
-
-https://stackoverflow.com/questions/2092659/what-is-the-difference-between-class-forname-and-class-forname-newinstanc
-
-1 : `import`
-
-```
-==> loads the class when you call any instance of it or call anything by class reference
-==> loads the class when call is made
-```
-
-2 : `Class.forName("");`
-
-```
-==> loads the class in the jvm immediately
-```
-
-difference can be seen by if a class has static block
-
-```
-==> import will not call the static block
-==> Class.forName("") will call the static block
-```
-
-In JDBC earlier than 4.0 case
-
-```
-===> Driver class when loaded by Class.forName("") , executes its static block , which published the driver
-==> Simply importing the Driver class wont execute the static block and thus your Driver will not be published for connection objects to be created
-```
-
-### Spring boot with JSP
-
-https://htr3n.github.io/2018/12/jsp-spring-boot/
-
-### @RequestBody && @ResponseBody
-
-https://www.baeldung.com/spring-request-response-body
-
 ## Singleton
 
 In general we follow below steps to create a singleton class:
@@ -1249,6 +1105,56 @@ Cons:
 
 - Extra if condition
 
+## Thread and Thread pooling
+
+https://stackify.com/java-thread-pools/#:~:text=The%20ThreadPoolExecutor%20provides%20more%20control,executed%20on%20their%20own%20threads.
+
+#### ThreadPoolExecutor: how does it reuse threads
+
+https://stackoverflow.com/questions/22112469/threadpoolexecutor-how-does-it-reuse-threads#:~:text=It's%20very%20simple%20%2D%20in%20essence,task%20and%20then%20sleep%20again.&text=A%20BlockingQueue%20uses%20wait%20and,they%20are%20not%20processing%20tasks.
+
+It's very simple - in essence the Threads sleep, waiting to be woken by a task - they run that task and then sleep again.
+
+```java
+public static void main(final String[] args) throws Exception {
+    final BlockingQueue<Runnable> blockingQueue = new LinkedBlockingDeque<>();
+    final Thread t = new Thread(new Runnable() {
+
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    blockingQueue.take().run();
+                } catch (InterruptedException ex) {
+                    return;
+                }
+            }
+        }
+    });
+    t.start();
+    blockingQueue.add(new Runnable() {
+
+        @Override
+        public void run() {
+            System.out.println("Task 1");
+        }
+    });
+    blockingQueue.add(new Runnable() {
+
+        @Override
+        public void run() {
+            System.out.println("Task 2");
+        }
+    });
+}
+```
+
+The `BlockingQueue` will block a `Thread` while it is empty. When I add an item, and Thread(s) currently blocked are awoken and one will take the task (LinkedBlockingDeque is thread safe). When the Thread is done with the task it goes back to sleep.
+
+The JavaDoc for ThreadPoolExecutor describes the logic in detail. All of the constructors for ThreadPoolExecutor take a BlockingQueue<Runnable> - this should give you a hint as so how the logic works.
+
+NB: This is not the same as busy waiting. A BlockingQueue uses wait and notify to suspend and wake Threads, this means that the Threads in the pool are not doing any work when they are not processing tasks. A busy wait based approach would not work because the Threads would block up all the CPU cores with their polling not allowing the program to proceed (or at least severely impairing it).
+
 ## Lambda expression
 
 https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
@@ -1358,11 +1264,170 @@ but you can't use type parameter:
 
 https://stackify.com/optional-java/
 
+## Factory pattern and Builder pattern
+
+https://stalk-calvin.github.io/blog/2016/10/15/builder-pattern.html#:~:text=Builder%20pattern%20is%20an%20object,object%20is%20being%20created%20though.
+
+## Java Database Connectivity (JDBC)
+
+To put it simply: Java (J2SE/J2EE) provides `java.sql.*` as the standard way to connect to a database. The issue is that these classes do not really know how to connect to each specific database in the model, they are oriented to the programmer.
+
+To connecto to each database, you need to put in its Driver. The Oracle driver will know how to connect to the Oracle database, the mysql driver will know how to connect to MySQL. `java.sql` will know how to use each Driver, so by just using it you do not need to know the internals of each Driver.
+
+https://en.wikipedia.org/wiki/JDBC_driver
+
+https://en.wikipedia.org/wiki/Java_Database_Connectivity
+
+### Connect to MySql
+
+https://www.ntu.edu.sg/home/ehchua/programming/java/JDBC_Basic.html
+
+### Close database connecion
+
+https://stackoverflow.com/questions/2121805/problem-with-not-closing-db-connection-while-debugging
+
+### JDBC vs JPA
+
+In layman's terms:
+
+JDBC is a standard for Database Access
+JPA is a standard for ORM
+
+JDBC is a standard for connecting to a DB directly and running SQL against it - e.g SELECT * FROM USERS, etc. Data sets can be returned which you can handle in your app, and you can do all the usual things like INSERT, DELETE, run stored procedures, etc. It is one of the underlying technologies behind most Java database access (including JPA providers).
+
+One of the issues with traditional JDBC apps is that you can often have some crappy code where lots of mapping between data sets and objects occur, logic is mixed in with SQL, etc.
+
+JPA is a standard for Object Relational Mapping. This is a technology which allows you to map between objects in code and database tables. This can "hide" the SQL from the developer so that all they deal with are Java classes, and the provider allows you to save them and load them magically. Mostly, XML mapping files or annotations on getters and setters can be used to tell the JPA provider which fields on your object map to which fields in the DB. The most famous JPA provider is Hibernate, so it's a good place to start for concrete examples.
+
+Other examples include OpenJPA, toplink, etc.
+
+Under the hood, Hibernate and most other providers for JPA write SQL and use JDBC to read and write from and to the DB.
+
+### DAO
+
+https://www.baeldung.com/java-dao-pattern#:~:text=The%20Data%20Access%20Object%20(DAO,mechanism)%20using%20an%20abstract%20API.
+
+The Data Access Object (DAO) pattern is a structural pattern that allows us to isolate the application/business layer from the persistence layer (usually a relational database, but it could be any other persistence mechanism) using an abstract API.
+
+The functionality of this API is to hide from the application all the complexities involved in performing CRUD operations in the underlying storage mechanism. This permits both layers to evolve separately without knowing anything about each other.
+
+### DAO vs Repository
+
+https://blog.sapiensworks.com/post/2012/11/01/Repository-vs-DAO.aspx
+
+Back to Repository and DAO, in conclusion, they have similar intentions only that the Repository is a higher level concept dealing directly with business/domain objects, while DAO is more lower level, closer to the database/storage dealing only with data. A (micro)ORM is a DAO that is used by a Repository. For data-centric apps, a repository and DAO are interchangeable because the 'business' objects are simple data.
+
+https://medium.com/@vngphm/repositories-pattern-vs-dao-pattern-765470e73cf3
+
+DAO maps to a table, if in a controller, you need to access two tables, one is local, the other is a rest API, you can create a Respository that read both DAOs and aggregate them together.
+
+You can also have a Service in front of Respository.
+
+So the level would be (in case of model Order)
+
+- OrderController
+- OrderService
+- OrderRepository ----------
+                            |---> together can be an unit of work
+- OrderDAO -----------------
+- JPA/EntityManager (Hibernet)
+- JDBC
+- Database
+
+
+### Bootstrapping JPA Programmatically in Java
+
+https://www.baeldung.com/java-bootstrap-jpa
+
+### Hibernate
+
+https://docs.jboss.org/hibernate/orm/4.0/devguide/en-US/html/ch01.html
+
+### DBCP
+
+database connection pooling
+
+https://commons.apache.org/proper/commons-dbcp/download_dbcp.cgi
+
+### Difference bettwen JDBC and ODBC
+
+https://www.quora.com/What-is-the-key-difference-between-JDBC-and-ODBC
+
+### Difference between EntityManagerFactory and SessionFactory in Hibernate
+
+https://stackoverflow.com/questions/5640778/hibernate-sessionfactory-vs-jpa-entitymanagerfactory
+
+
+### Difference Between import and class.forName in java
+
+https://stackoverflow.com/questions/2092659/what-is-the-difference-between-class-forname-and-class-forname-newinstanc
+
+1 : `import`
+
+```
+==> loads the class when you call any instance of it or call anything by class reference
+==> loads the class when call is made
+```
+
+2 : `Class.forName("");`
+
+```
+==> loads the class in the jvm immediately
+```
+
+difference can be seen by if a class has static block
+
+```
+==> import will not call the static block
+==> Class.forName("") will call the static block
+```
+
+In JDBC earlier than 4.0 case
+
+```
+===> Driver class when loaded by Class.forName("") , executes its static block , which published the driver
+==> Simply importing the Driver class wont execute the static block and thus your Driver will not be published for connection objects to be created
+```
 
 ## Spring
 
-### Spring IoC/Context/BeanFactory
+#### Spring IoC/Context/BeanFactory
 
-### Spring Data
+#### Spring Data
 
-### stream with spring cloud stream
+#### Stream with spring cloud stream
+
+#### Spring Boot Hibernate example
+
+https://java2blog.com/spring-boot-hibernate-example/
+
+#### @SpringBootApplication annotation
+
+The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes.
+
+#### CreatedOn and UpdatedOn with Hibernate
+
+https://stackoverflow.com/questions/221611/creation-timestamp-and-last-update-timestamp-with-hibernate-and-mysql
+
+#### Use auto-increment primary key using hibernate
+
+https://thorben-janssen.com/hibernate-tips-use-auto-incremented-column-primary-key/#:~:text=If%20you%20want%20to%20use,IDENTITY.&text=If%20you%20now%20persist%20a,generate%20the%20primary%20key%20value.
+
+#### Spring boot with JSP
+
+https://htr3n.github.io/2018/12/jsp-spring-boot/
+
+#### @RequestBody && @ResponseBody
+
+https://www.baeldung.com/spring-request-response-body
+
+#### @ResponseStatus
+
+https://www.baeldung.com/spring-response-status
+
+
+#### @Resource, @Inject and @Autowired
+
+https://www.baeldung.com/spring-annotations-resource-inject-autowire
+
+https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pankaj-kumar/
