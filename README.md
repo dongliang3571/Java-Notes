@@ -1439,3 +1439,46 @@ https://www.baeldung.com/spring-response-status
 https://www.baeldung.com/spring-annotations-resource-inject-autowire
 
 https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pankaj-kumar/
+
+#### Aspect-Oriented Programming(AOP )
+
+https://docs.jboss.org/aop/1.0/aspect-framework/userguide/en/html/what.html
+
+**1.1. What is it?**
+
+An aspect is a common feature that's typically scattered across methods, classes, object hierarchies, or even entire object models. It is behavior that looks and smells like it should have structure, but you can't find a way to express this structure in code with traditional object-oriented techniques.
+
+For example, metrics is one common aspect. To generate useful logs from your application, you have to (often liberally) sprinkle informative messages throughout your code. However, metrics is something that your class or object model really shouldn't be concerned about. After all, metrics is irrelevant to your actual application: it doesn't represent a customer or an account, and it doesn't realize a business rule. It's simply orthogonal.
+
+In AOP, a feature like metrics is called a crosscutting concern, as it's a behavior that "cuts" across multiple points in your object models, yet is distinctly different. As a development methodology, AOP recommends that you abstract and encapsulate crosscutting concerns.
+
+For example, let's say you wanted to add code to an application to measure the amount of time it would take to invoke a particular method. In plain Java, the code would look something like the following.
+
+```java
+public class BankAccountDAO
+{
+  public void withdraw(double amount)
+  {
+    long startTime = System.currentTimeMillis();
+    try
+    {
+      // Actual method body...
+    }
+    finally
+    {
+      long endTime = System.currentTimeMillis() - startTime;
+      System.out.println("withdraw took: " + endTime);
+    }
+  }
+}
+```
+
+While this code works, there are a few problems with this approach:
+
+- It's extremely difficult to turn metrics on and off, as you have to manually add the code in the try>/finally block to each and every method or constructor you want to benchmark.
+- The profiling code really doesn't belong sprinkled throughout your application code. It makes your code bloated and harder to read, as you have to enclose the timings within a try/finally block.
+- If you wanted to expand this functionality to include a method or failure count, or even to register these statistics to a more sophisticated reporting mechanism, you'd have to modify a lot of different files (again).
+
+This approach to metrics is very difficult to maintain, expand, and extend, because it's dispersed throughout your entire code base. And this is just a tiny example! In many cases, OOP may not always be the best way to add metrics to a class.
+
+Aspect-oriented programming gives you a way to encapsulate this type of behavior functionality. It allows you to add behavior such as metrics "around" your code. For example, AOP provides you with programmatic control to specify that you want calls to BankAccountDAO to go through a metrics aspect before executing the actual body of that code.
