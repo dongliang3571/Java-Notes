@@ -1155,6 +1155,14 @@ The JavaDoc for ThreadPoolExecutor describes the logic in detail. All of the con
 
 NB: This is not the same as busy waiting. A BlockingQueue uses wait and notify to suspend and wake Threads, this means that the Threads in the pool are not doing any work when they are not processing tasks. A busy wait based approach would not work because the Threads would block up all the CPU cores with their polling not allowing the program to proceed (or at least severely impairing it).
 
+#### The Event Dispatch Thread
+
+Swing event handling code runs on a special thread known as the event dispatch thread. Most code that invokes Swing methods also runs on this thread. This is necessary because most Swing object methods are not "thread safe": invoking them from multiple threads risks thread interference or memory consistency errors. Some Swing component methods are labelled "thread safe" in the API specification; these can be safely invoked from any thread. All other Swing component methods must be invoked from the event dispatch thread. Programs that ignore this rule may function correctly most of the time, but are subject to unpredictable errors that are difficult to reproduce.
+
+It's useful to think of the code running on the event dispatch thread as a series of short tasks. Most tasks are invocations of event-handling methods, such as ActionListener.actionPerformed. Other tasks can be scheduled by application code, using invokeLater or invokeAndWait. Tasks on the event dispatch thread must finish quickly; if they don't, unhandled events back up and the user interface becomes unresponsive.
+
+If you need to determine whether your code is running on the event dispatch thread, invoke `javax.swing.SwingUtilities.isEventDispatchThread`.
+
 ## Lambda expression
 
 https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
