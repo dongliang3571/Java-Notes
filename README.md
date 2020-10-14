@@ -1485,6 +1485,16 @@ Aspect-oriented programming gives you a way to encapsulate this type of behavior
 
 ### Maven
 
-**Difference between dependencies management and dependencies
+**Difference between dependencies management and dependencies**
 
 https://jainamit333.wordpress.com/2017/08/05/difference-between-dependency-management-and-dependencies-in-maven/
+
+**mvnw and mvnw.cmd**
+
+https://stackoverflow.com/questions/38723833/what-is-the-purpose-of-mvnw-and-mvnw-cmd-files
+
+These files are from Maven wrapper. It works similarly to the Gradle wrapper.
+
+This allows you to run the Maven project without having Maven installed and present on the path. It downloads the correct Maven version if it's not found (as far as I know by default in your user home directory).
+
+The mvnw file is for Linux (bash) and the mvnw.cmd is for the Windows environment.
