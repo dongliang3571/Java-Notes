@@ -1498,3 +1498,43 @@ These files are from Maven wrapper. It works similarly to the Gradle wrapper.
 This allows you to run the Maven project without having Maven installed and present on the path. It downloads the correct Maven version if it's not found (as far as I know by default in your user home directory).
 
 The mvnw file is for Linux (bash) and the mvnw.cmd is for the Windows environment.
+
+**Difference between Snapshot and Release**
+
+A **Snapshot** version in Maven is one that has not been released.
+
+The idea is that before a 1.0 release (or any other release) is done, there exists a 1.0-SNAPSHOT. That version is what might become 1.0. It's basically "1.0 under development". This might be close to a real 1.0 release, or pretty far (right after the 0.9 release, for example).
+
+The difference between a "real" version and a snapshot version is that snapshots might get updates. That means that downloading 1.0-SNAPSHOT today might give a different file than downloading it yesterday or tomorrow.
+
+Usually, snapshot dependencies should only exist during development and no released version (i.e. no non-snapshot) should have a dependency on a snapshot version.
+
+A **Release** build is the final build for a version which does not change.
+
+**Snapshot dependencies behavior**
+
+When you build an application, Maven will search for dependencies in the local repository. If a stable version is not found there, it will search the remote repositories (defined in settings.xml or pom.xml) to retrieve this dependency. Then, it will copy it into the local repository, to make it available for the next builds.
+
+For example, a foo-1.0.jar library is considered as a stable version, and if Maven finds it in the local repository, it will use this one for the current build.
+
+Now, if you need a foo-1.0-SNAPSHOT.jar library, Maven will know that this version is not stable and is subject to changes. That's why Maven will try to find a newer version in the remote repositories, even if a version of this library is found on the local repository. However, this check is made only once per day. That means that if you have a foo-1.0-20110506.110000-1.jar (i.e. this library has been generated on 2011/05/06 at 11:00:00) in your local repository, and if you run the Maven build again the same day, Maven will not check the repositories for a newer version.
+
+Maven provides you a way to change this update policy in your repository definition:
+
+```xml
+<repository>
+    <id>foo-repository</id>
+    <url>...</url>
+    <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>XXX</updatePolicy>
+    </snapshots>
+</repository>
+```
+
+where XXX can be:
+
+- always: Maven will check for a newer version on every build;
+- daily, the default value;
+- interval:XXX: an interval in minutes (XXX)
+- never: Maven will never try to retrieve another version. It will do that only if it doesn't exist locally. With the configuration, SNAPSHOT version will be handled as the stable libraries.
