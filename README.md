@@ -1485,11 +1485,11 @@ Aspect-oriented programming gives you a way to encapsulate this type of behavior
 
 ### Maven
 
-**Difference between dependencies management and dependencies**
+#### Difference between dependencies management and dependencies**
 
 https://jainamit333.wordpress.com/2017/08/05/difference-between-dependency-management-and-dependencies-in-maven/
 
-**mvnw and mvnw.cmd**
+#### mvnw and mvnw.cmd
 
 https://stackoverflow.com/questions/38723833/what-is-the-purpose-of-mvnw-and-mvnw-cmd-files
 
@@ -1499,7 +1499,7 @@ This allows you to run the Maven project without having Maven installed and pres
 
 The mvnw file is for Linux (bash) and the mvnw.cmd is for the Windows environment.
 
-**Difference between Snapshot and Release**
+#### Difference between Snapshot and Release
 
 A **Snapshot** version in Maven is one that has not been released.
 
@@ -1511,7 +1511,7 @@ Usually, snapshot dependencies should only exist during development and no relea
 
 A **Release** build is the final build for a version which does not change.
 
-**Snapshot dependencies behavior**
+#### Snapshot dependencies behavior
 
 When you build an application, Maven will search for dependencies in the local repository. If a stable version is not found there, it will search the remote repositories (defined in settings.xml or pom.xml) to retrieve this dependency. Then, it will copy it into the local repository, to make it available for the next builds.
 
@@ -1538,3 +1538,37 @@ where XXX can be:
 - daily, the default value;
 - interval:XXX: an interval in minutes (XXX)
 - never: Maven will never try to retrieve another version. It will do that only if it doesn't exist locally. With the configuration, SNAPSHOT version will be handled as the stable libraries.
+
+#### Multi-Module project
+
+A multi-module project is built from an aggregator POM that manages a group of submodules. In most cases, the aggregator is located in the project's root directory and must have packaging of type `pom`.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.some.assets</groupId>
+    <artifactId>some-name</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging> <!--packaging type pom-->
+</project>
+```
+
+Now, the submodules are regular Maven projects, and they can be built separately or through the aggregator POM.
+
+By building the project through the aggregator POM, each project that has packaging type different than pom will result in a built archive file.
+
+**Benefits of using multi-modules**
+
+The significant advantage of using this approach is that we may reduce duplication.
+
+The significant advantage of using this approach is that we may reduce duplication.
+
+Let's say we have an application which consists of several modules, let it be a front-end module and a back-end module. Now, we work on both of them and change functionality which affects the two. In that case, without a specialized build tool, we'll have to build both components separately or write a script which would compile the code, run tests and show the results. Then, after we get even more modules in the project, it will become harder to manage and maintain.
+
+Besides, in the real world, projects may need certain Maven plugins to perform various operations during build lifecycle, share dependencies and profiles or include other BOM projects.
+
+Therefore, when leveraging multi-modules, we can build our application's modules in a single command and if the order matters, Maven will figure this out for us. Also, we can share a vast amount of configuration with other modules.
