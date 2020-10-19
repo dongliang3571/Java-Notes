@@ -1440,6 +1440,29 @@ https://www.baeldung.com/spring-annotations-resource-inject-autowire
 
 https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pankaj-kumar/
 
+#### @Profile
+
+Profiles are a core feature of the framework — allowing us to map our beans to different profiles — for example, **dev, test, and prod**.
+
+```java
+@Component
+@Profile("dev")
+public class DevDatasourceConfig
+```
+
+As a quick sidenote, profile names can also be prefixed with a NOT operator, e.g., `!dev`, to exclude them from a profile.
+
+In the example, the component is activated only if dev profile is not active:
+
+```java
+@Component
+@Profile("!dev")
+public class DevDatasourceConfig
+```
+
+Pass `-Dspring.profiles.active=dev` to the VM Options to activate a profile
+
+
 #### Aspect-Oriented Programming(AOP )
 
 https://docs.jboss.org/aop/1.0/aspect-framework/userguide/en/html/what.html
