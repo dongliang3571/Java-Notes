@@ -1667,7 +1667,23 @@ public class DevDatasourceConfig
 Pass `-Dspring.profiles.active=dev` to the VM Options to activate a profile
 
 
-#### Aspect-Oriented Programming(AOP )
+#### @Enable 
+
+https://www.baeldung.com/spring-enable-annotations
+
+Spring comes with a set of `@Enable` annotations that make it easier for developers to configure a Spring application. These annotations are used in conjunction with the `@Configuration` annotation.
+
+- @EnableWebMvc
+- @EnableCaching
+- @EnableScheduling
+- @EnableAsync
+- @EnableWebSocket
+- @EnableJpaRepositories
+- @EnableTransactionManagement
+- @EnableJpaAuditing
+
+
+#### Aspect-Oriented Programming(AOP)
 
 https://docs.jboss.org/aop/1.0/aspect-framework/userguide/en/html/what.html
 
