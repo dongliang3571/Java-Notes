@@ -1440,6 +1440,14 @@ https://www.baeldung.com/spring-annotations-resource-inject-autowire
 
 https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pankaj-kumar/
 
+#### @Component
+
+`@Component` is the most generic Spring annotation. A Java class decorated with` @Component` is found during classpath scanning and registered in the context as a Spring bean. `@Service`, `@Repository`, and `@Controller` are specializations of `@Component`, which are used for more specific cases.
+
+`@ComponentScan` ensures that the classes decorated with `@Component` are found and registered as Spring beans. `@ComponentScan` is automatically included with `@SpringBootApplication`.
+
+`@Bean` servers a similar purpose as `@Component`. It is not autodetected. Methods decorated with `@Bean` produce a bean to be managed by the Spring container during configuration stage.
+
 #### @Profile
 
 Profiles are a core feature of the framework — allowing us to map our beans to different profiles — for example, **dev, test, and prod**.
