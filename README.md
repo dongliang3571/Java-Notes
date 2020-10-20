@@ -1446,7 +1446,203 @@ https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pa
 
 `@ComponentScan` ensures that the classes decorated with `@Component` are found and registered as Spring beans. `@ComponentScan` is automatically included with `@SpringBootApplication`.
 
+#### @Bean
+
 `@Bean` servers a similar purpose as `@Component`. It is not autodetected. Methods decorated with `@Bean` produce a bean to be managed by the Spring container during configuration stage.
+
+#### Difference between @Bean and @Component
+
+@Component and @Bean do two quite different things, and shouldn't be confused.
+
+@Component (and @Service and @Repository) are used to auto-detect and auto-configure beans using classpath scanning. There's an implicit one-to-one mapping between the annotated class and the bean (i.e. one bean per class). Control of wiring is quite limited with this approach, since it's purely declarative.
+
+@Bean is used to explicitly declare a single bean, rather than letting Spring do it automatically as above. It decouples the declaration of the bean from the class definition, and lets you create and configure beans exactly how you choose.
+
+#### When use @Bean?
+
+When should you use @Bean?
+
+Sometimes automatic configuration is not an option. When? Let's imagine that you want to wire components from 3rd-party libraries (you don't have the source code so you can't annotate its classes with @Component), so automatic configuration is not possible.
+
+@Bean Methods in @Configuration Classes
+
+Typically, @Bean methods are declared within @Configuration classes. In this case, bean methods may reference other @Bean methods in the same class by calling them directly. This ensures that references between beans are strongly typed and navigable. Such so-called 'inter-bean references' are guaranteed to respect scoping and AOP semantics, just like getBean() lookups would. These are the semantics known from the original 'Spring JavaConfig' project which require CGLIB subclassing of each such configuration class at runtime. As a consequence, @Configuration classes and their factory methods must not be marked as final or private in this mode. For example:
+
+```java
+ @Configuration
+ public class AppConfig {
+
+     @Bean
+     public FooService fooService() {
+         return new FooService(fooRepository());
+     }
+
+     @Bean
+     public FooRepository fooRepository() {
+         return new JdbcFooRepository(dataSource());
+     }
+
+     // ...
+}
+```
+
+
+@Bean methods may also be declared within classes that are not annotated with @Configuration. For example, bean methods may be declared in a @Component class or even in a plain old class. In such cases, a @Bean method will get processed in a so-called 'lite' mode.
+
+Bean methods in lite mode will be treated as plain factory methods by the container (similar to factory-method declarations in XML), with scoping and lifecycle callbacks properly applied. The containing class remains unmodified in this case, and there are no unusual constraints for the containing class or the factory methods.
+
+In contrast to the semantics for bean methods in @Configuration classes, 'inter-bean references' are not supported in lite mode. Instead, when one @Bean-method invokes another @Bean-method in lite mode, the invocation is a standard Java method invocation; Spring does not intercept the invocation via a CGLIB proxy. This is analogous to inter-@Transactional method calls where in proxy mode, Spring does not intercept the invocation — Spring does so only in AspectJ mode.
+
+For example:
+
+```java
+ @Component
+ public class Calculator {
+     public int sum(int a, int b) {
+         return a+b;
+     }
+
+     @Bean
+     public MyBean myBean() {
+         return new MyBean();
+     }
+ }
+
+```
+
+
+Example of @Bean Lite Mode and @Bean in a @Configuration class
+
+```java
+@Configuration
+public static class Config {
+
+    @Bean
+    public SimpleBean simpleBean() {
+        return new SimpleBean();
+    }
+
+    @Bean
+    public SimpleBeanConsumer simpleBeanConsumer() {
+        return new SimpleBeanConsumer(simpleBean());
+    }
+}
+```
+
+```java
+@Component
+public static class Config {
+
+    @Bean
+    public SimpleBean simpleBean() {
+        return new SimpleBean();
+    }
+
+    @Bean
+    public SimpleBeanConsumer simpleBeanConsumer() {
+        return new SimpleBeanConsumer(simpleBean());
+    }
+}
+```
+
+The first piece of code works fine, and as expected, SimpleBeanConsumer will get a link to singleton SimpleBean. But unfortunately, it doesn’t work in a signed enviroment.
+
+The second configuration is totally incorrect because spring will create a singleton bean of SimpleBean, but SimpleBeanConsumer will obtain another instance of SimpleBean which is out of the spring context control.
+
+The reason for this behaviour can be explained as follows:
+
+If you use @Configuration, all methods marked as @Bean will be wrapped into a CGLIB wrapper which works as if it’s the first call of this method, then the original method’s body will be executed and the resulting object will be registered in the spring context. All further calls just return the bean retrieved from the context.
+
+In the second code block above, new SimpleBeanConsumer(simpleBean()) just calls a pure java method. To correct the second code block, we can do something like this:
+
+```java
+@Component
+public static class Config {
+    @Autowired
+    SimpleBean simpleBean;
+
+    @Bean
+    public SimpleBean simpleBean() {
+        return new SimpleBean();
+    }
+
+    @Bean
+    public SimpleBeanConsumer simpleBeanConsumer() {
+        return new SimpleBeanConsumer(simpleBean);
+    }
+}
+```
+
+#### @Configuration
+
+https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html
+
+```java
+@Target(value=TYPE)
+@Retention(value=RUNTIME)
+@Documented
+@Component
+public @interface Configuration
+```
+
+Indicates that a class declares one or more `@Bean` methods and may be processed by the Spring container to generate bean definitions and service requests for those beans at runtime, for example:
+
+#### @ConfigurationProperties
+
+http://zetcode.com/springboot/configurationproperties/
+
+Spring Boot `@ConfigurationProperties` tutorial shows how to bind properties to an object with `@ConfigurationProperties` in a Spring Boot application.
+
+`@ConfigurationProperties` allows to map the entire Properties and Yaml files into an object easily. It also allows to validate properties with JSR-303 bean validation. By default, the annotation reads from the `application.properties` file. The source file can be changed with `@PropertySource` annotation.
+
+```bash
+# resources/application.properties
+spring.main.banner-mode=off
+
+app.colour=steelblue
+app.lang=en
+app.theme=dark
+```
+
+```java
+package com.zetcode.conf;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConfigurationProperties(prefix = "app")
+public class AppProperties {
+
+    private String colour;
+    private String lang;
+    private String theme;
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+}
+````
 
 #### @Profile
 
