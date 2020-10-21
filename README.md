@@ -2012,3 +2012,25 @@ Let's say we have an application which consists of several modules, let it be a 
 Besides, in the real world, projects may need certain Maven plugins to perform various operations during build lifecycle, share dependencies and profiles or include other BOM projects.
 
 Therefore, when leveraging multi-modules, we can build our application's modules in a single command and if the order matters, Maven will figure this out for us. Also, we can share a vast amount of configuration with other modules.
+
+#### Build lifecycle
+
+https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+
+
+run units tests and all phases before `test`
+
+```bash
+mvn test
+```
+
+run integration tests and all phases before `verify`
+
+```bash
+mvn verify
+```
+
+#### Plugins
+
+- Maven Surefire Plugin - To run unit tests
+- Maven Failsafe Plugin - To run integration tests
