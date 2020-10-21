@@ -1728,9 +1728,200 @@ Aspect-oriented programming gives you a way to encapsulate this type of behavior
 
 #### Testing
 
-##### Integration test for web
+##### testing web
 
 https://spring.io/guides/gs/testing-web/
+
+**Controller**
+
+```java
+package com.example.testingweb;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class HomeController {
+
+	@RequestMapping("/")
+	public @ResponseBody String greeting() {
+		return "Hello, World";
+	}
+
+}
+```
+
+**Test all layers including starting a web server**
+
+Note the use of `webEnvironment=RANDOM_PORT` to start the server with a random port (useful to avoid conflicts in test environments) and the injection of the port with `@LocalServerPort`. Also, note that Spring Boot has automatically provided a `TestRestTemplate` for you. All you have to do is add `@Autowired` to it.
+
+```java
+package com.example.testingweb;
+
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+public class HttpRequestTest {
+
+	@LocalServerPort
+	private int port;
+
+	@Autowired
+	private TestRestTemplate restTemplate;
+
+	@Test
+	public void greetingShouldReturnDefaultMessage() throws Exception {
+		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/",
+				String.class)).contains("Hello, World");
+	}
+}
+```
+
+**Test all layers below web server (does start an application context)**
+
+Another useful approach is to not start the server at all but to test only the layer below that, where Spring handles the incoming HTTP request and hands it off to your controller. That way, almost of the full stack is used, and your code will be called in exactly the same way as if it were processing a real HTTP request but without the cost of starting the server. To do that, use Spring’s MockMvc and ask for that to be injected for you by using the `@AutoConfigureMockMvc` annotation on the test case.
+
+```java
+package com.example.testingweb;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class TestingWebApplicationTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@Test
+	public void shouldReturnDefaultMessage() throws Exception {
+		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Hello, World")));
+	}
+}
+```
+
+**Test web layers (Controller level)**
+
+We can narrow the tests to only the web layer by using `@WebMvcTest`
+
+```java
+@WebMvcTest
+public class WebLayerTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@Test
+	public void shouldReturnDefaultMessage() throws Exception {
+		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Hello, World")));
+	}
+}
+```
+
+**Test web layers with dependencies**
+
+Controller
+
+```java
+package com.example.testingweb;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+@Controller
+public class GreetingController {
+
+	private final GreetingService service;
+
+	public GreetingController(GreetingService service) {
+		this.service = service;
+	}
+
+	@RequestMapping("/greeting")
+	public @ResponseBody String greeting() {
+		return service.greet();
+	}
+
+}
+```
+
+Service
+
+```java
+package com.example.testingweb;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class GreetingService {
+	public String greet() {
+		return "Hello, World";
+	}
+}
+```
+
+Test
+
+```java
+package com.example.testingweb;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(GreetingController.class)
+public class WebMockTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@MockBean
+	private GreetingService service;
+
+	@Test
+	public void greetingShouldReturnMessageFromService() throws Exception {
+		when(service.greet()).thenReturn("Hello, Mock");
+		this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Hello, Mock")));
+	}
+}
+```
+
+We use `@MockBean` to create and inject a mock for the `GreetingService` (if you do not do so, the application context cannot start), and we set its expectations using `Mockito`.
 
 ### Maven
 
