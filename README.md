@@ -1726,6 +1726,12 @@ This approach to metrics is very difficult to maintain, expand, and extend, beca
 
 Aspect-oriented programming gives you a way to encapsulate this type of behavior functionality. It allows you to add behavior such as metrics "around" your code. For example, AOP provides you with programmatic control to specify that you want calls to BankAccountDAO to go through a metrics aspect before executing the actual body of that code.
 
+#### Testing
+
+##### Integration test for web
+
+https://spring.io/guides/gs/testing-web/
+
 ### Maven
 
 #### Difference between dependencies management and dependencies**
