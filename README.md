@@ -1433,6 +1433,40 @@ https://www.baeldung.com/spring-request-response-body
 
 https://www.baeldung.com/spring-response-status
 
+#### @Value
+
+https://www.baeldung.com/spring-value-annotation
+
+properties file
+
+```bash
+value.from.file=Value got from the file
+priority=high
+```
+
+In the following example, we get "Value got from the file" assigned to the field:
+
+
+```java
+@Value("${value.from.file}")
+private String valueFromFile
+```
+
+We can also set the value from system properties with the same syntax.
+
+Let's assume that we have defined a system property named `systemValue`:
+
+```java
+@Value("${systemValue}")
+private String systemValue;
+```
+
+Default values can be provided for properties that might not be defined. Here, the value some default will be injected:
+
+```java
+@Value("${unknown.param:some default}")
+private String someDefault;
+```
 
 #### @Resource, @Inject and @Autowired
 
