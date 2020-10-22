@@ -1678,6 +1678,25 @@ public class AppProperties {
 }
 ````
 
+
+#### @Import
+
+#### what is the difference between @Configuration and @Import
+
+```java
+@Configuration 
+class ConfigA extends ConfigB { 
+//Some bean definitions here 
+}
+
+@Configuration 
+@Import({ConfigB.class}) class ConfigA { 
+//Some bean definitions here 
+}
+```
+
+`@Import` would allow you to import multiple configurations while extending will restrict you to one class since java doesn't support multiple inheritance.
+
 #### @Profile
 
 Profiles are a core feature of the framework — allowing us to map our beans to different profiles — for example, **dev, test, and prod**.
