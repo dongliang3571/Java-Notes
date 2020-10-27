@@ -1676,7 +1676,173 @@ public class AppProperties {
         this.theme = theme;
     }
 }
-````
+```
+
+#### @PropertySource
+
+https://mkyong.com/spring/spring-propertysources-example/
+
+**Using @Value to display**
+
+A classic example, read a properties file and display with ${} using @Value
+
+```bash
+# config.properties
+mongodb.url=1.2.3.4
+mongodb.db=hello
+```
+
+```java
+package com.mkyong.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+//...
+
+@Configuration
+@ComponentScan(basePackages = { "com.mkyong.*" })
+@PropertySource("classpath:config.properties")
+public class AppConfigMongoDB {
+
+	//1.2.3.4
+	@Value("${mongodb.url}")
+	private String mongodbUrl;
+
+	//hello
+	@Value("${mongodb.db}")
+	private String defaultDb;
+
+	@Bean
+	public MongoTemplate mongoTemplate() throws Exception {
+
+		MongoClientOptions mongoOptions =
+			new MongoClientOptions.Builder().maxWaitTime(1000 * 60 * 5).build();
+		MongoClient mongo = new MongoClient(mongodbUrl, mongoOptions);
+		MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo, defaultDb);
+		return new MongoTemplate(mongoDbFactory);
+
+	}
+
+	//To resolve ${} in @Value
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
+}
+```
+
+**Note** To resolve ·${}· in @Values, you must register a static `PropertySourcesPlaceholderConfigurer` in either XML or annotation configuration file.
+
+
+**Using `Environment` to display**
+
+Another example， use Environment to display properties
+
+Spring recommends to use Environment to get the property values.
+
+```java
+// AppConfigMongoDB.java
+package com.mkyong.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+//...
+
+@Configuration
+@ComponentScan(basePackages = { "com.mkyong.*" })
+@PropertySource("classpath:config.properties")
+public class AppConfigMongoDB {
+
+	@Autowired
+	private Environment env;
+
+	@Bean
+	public MongoTemplate mongoTemplate() throws Exception {
+
+		String mongodbUrl = env.getProperty("mongodb.url");
+		String defaultDb = env.getProperty("mongodb.db");
+
+		MongoClientOptions mongoOptions =
+			new MongoClientOptions.Builder().maxWaitTime(1000 * 60 * 5).build();
+		MongoClient mongo = new MongoClient(mongodbUrl, mongoOptions);
+		MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo, defaultDb);
+		return new MongoTemplate(mongoDbFactory);
+
+	}
+
+}
+```
+
+**More @PropertySource Examples**
+
+Example to resolve ${} within @PropertySource resource locations.
+
+```java
+@Configuration
+@PropertySource("file:${app.home}/app.properties")
+public class AppConfig {
+	@Autowired
+	Environment env;
+}
+```
+
+Set a system property during startup.
+
+```java
+System.setProperty("app.home", "test");
+```
+
+or
+
+```bash
+java -jar -Dapp.home="/home/mkyon/test" example.jar
+```
+
+Include multiple properties files.
+
+```java
+@Configuration
+@PropertySource({
+	"classpath:config.properties",
+	"classpath:db.properties" //if same key, this will 'win'
+})
+public class AppConfig {
+	@Autowired
+	Environment env;
+}
+```
+
+Introduces new `@PropertySource`s to support Java 8 and better way to include multiple properties files.
+
+```java
+@Configuration
+@PropertySources({
+	@PropertySource("classpath:config.properties"),
+	@PropertySource("classpath:db.properties")
+})
+public class AppConfig {
+	//...
+}
+```
+
+you can use `ignoreResourceNotFound` to ignore the not found properties file
+
+```java
+@Configuration
+@PropertySource(value="classpath:missing.properties", ignoreResourceNotFound=true)
+public class AppConfig {
+	//...
+}
+```
 
 
 #### @Import
