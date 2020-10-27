@@ -1607,6 +1607,27 @@ public static class Config {
 }
 ```
 
+#### @ConditionalOnMissingBean 
+
+This annotation is used to load a bean only if a given bean is missing:
+
+```java
+@Bean
+@ConditionalOnMissingBean(SomeBean.class)
+public SomeBean otherBean(){
+    return new SomeBean();
+}
+```
+
+The above bean will get loaded by Spring only if there is no other bean of this type present in the context. On the other hand, if there is already a bean of the type SomeBean present in the application context, the above bean will not be created.
+
+Some use cases where this annotation comes in handy are:
+
+- Specifying a fallback bean which gets only loaded as a backup if there is no bean of the same type present (for example: using an in-memory database if there is no real database configured)
+
+- Specifying a default bean which allows being overridden in the case that a more specific bean of the same type is present in the context (for example: using a default authentication mechanism unless someone decides to replace it with his own custom authentication)
+
+
 #### @Configuration
 
 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html
