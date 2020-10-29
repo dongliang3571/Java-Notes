@@ -1966,9 +1966,24 @@ This approach to metrics is very difficult to maintain, expand, and extend, beca
 
 Aspect-oriented programming gives you a way to encapsulate this type of behavior functionality. It allows you to add behavior such as metrics "around" your code. For example, AOP provides you with programmatic control to specify that you want calls to BankAccountDAO to go through a metrics aspect before executing the actual body of that code.
 
-#### Testing
+### Testing
 
-##### testing web
+#### JUnit
+
+##### Annoation
+
+- `@RunWIth`
+
+https://www.logicbig.com/tutorials/unit-testing/junit/runner.html
+
+`@RunWith` annotation has been replaced by the more powerful `@ExtendWith` annotation.
+
+However, the @RunWith annotation can still be used in JUnit5 for the sake of the backward compatibility.
+
+If a JUnit class or its parent class is annotated with @RunWith, JUnit framework invokes the specified class as a test runner instead of running the default runner.
+
+
+#### testing web
 
 https://spring.io/guides/gs/testing-web/
 
@@ -2162,6 +2177,7 @@ public class WebMockTest {
 ```
 
 We use `@MockBean` to create and inject a mock for the `GreetingService` (if you do not do so, the application context cannot start), and we set its expectations using `Mockito`.
+
 
 ### Maven
 
