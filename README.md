@@ -607,7 +607,7 @@ The following table shows the access to members permitted by each modifier.
 |  private  |   Y   |    N    |     N    |   N   |
 
 
-## Casting
+### Casting
 
 ### Compile-Time Type Checking
 
@@ -745,8 +745,17 @@ public static void main(String[] args) {
 }
 ```
 
+### System properties and Environment variables
 
-## Package
+https://www.baeldung.com/java-system-get-property-vs-system-getenv
+
+Although both are essentially maps that provide String values for String keys, let's look at a few differences:
+
+1. We can update Properties at runtime while Environment Variables are an immutable copy of the Operating System's variables.
+2. Properties are contained only within Java platform while Environment Variables are global at the Operating System level – available to all applications running on the same machine.
+3. Properties must exist when packaging the application but we can create Environment Variables on the Operating System at almost any point.
+
+### Package
 
 **Definition:** A package is a grouping of related types providing access protection and name space management. Note that types refers to classes, interfaces, enumerations, and annotation types. Enumerations and annotation types are special kinds of classes and interfaces, respectively, so types are often referred to in this lesson simply as classes and interfaces.
 
