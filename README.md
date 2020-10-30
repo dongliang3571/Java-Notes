@@ -2290,3 +2290,7 @@ mvn verify
 
 - Maven Surefire Plugin - To run unit tests
 - Maven Failsafe Plugin - To run integration tests
+
+#### Profiles
+
+https://maven.apache.org/guides/introduction/introduction-to-profiles.html
