@@ -1408,7 +1408,25 @@ In JDBC earlier than 4.0 case
 
 ## Spring
 
-#### Spring IoC/Context/BeanFactory
+#### What is Spring framework
+
+https://www.marcobehler.com/guides/spring-framework
+
+At its core, Spring framework is really just a dependency injection container, with a couple of convenience layers (think: database access, proxies, aspect-oriented programming, RPC, a web mvc framework) added on top. It helps you build Java application faster and more conveniently.
+
+
+#### What is Spring MVC
+
+https://www.marcobehler.com/guides/spring-mvc
+
+#### What is Spring Boot
+
+Spring Boot is just a shared context configuration with tons of `@Conditional`s?
+
+`@Conditional`s that create a DataSource for you, because you have set specific properties (think: spring.datasource.url)? Or `@Conditional`s that boot up an embedded Tomcat server for you because you have the Tomcat libraries on your classpath?
+
+https://www.marcobehler.com/guides/spring-boot
+
 
 #### Spring Data
 
@@ -1433,6 +1451,7 @@ https://thorben-janssen.com/hibernate-tips-use-auto-incremented-column-primary-k
 #### Spring boot with JSP
 
 https://htr3n.github.io/2018/12/jsp-spring-boot/
+
 
 #### @RequestBody && @ResponseBody
 
@@ -1616,6 +1635,86 @@ public static class Config {
 }
 ```
 
+#### @Conditional
+
+The Spring Framework offers the `@Conditional` annotation since version 4.0 (released on 2013). You can put it on `@Bean` methods, `@Components` or even `@Configurations` and it looks like so:
+
+```java
+@Conditional(SomeCondition.class) // (1)
+```
+
+It has a "Condition" class parameter, which is a class that has a method called "matches", returning a simple Boolean.
+
+True: (Further Evaluate/Register) Create that `@Bean`, `@Component` or `@Configuration`
+
+False: (Stop Evaluating/Registering) Don’t create that `@Bean`, `@Component` or `@Configuration`
+
+In short: Even though an `ApplicationContextConfiguration` comes with certain @Bean definitions, you as the end-user can still somewhat influence if a bean gets created or not.
+
+**Making the shared `ApplicationContextConfiguration` `@Conditional`**
+
+What does that mean for our `SharedConfiguration`? We could refactor it to look like this:
+
+```java
+@Configuration
+public class SharedContextConfiguration {
+
+    @Bean
+    @Conditional(IsRelationalDatabaseCondition.class) // (1)
+    public ReallyBigCompanyProprietaryFlywayClone flywayClone() {
+        return new ReallyBigCompanyProprietaryFlywayClone();
+    }
+}
+```
+
+
+Implementing a Spring Condition
+
+```java
+package com.marcobehler;
+
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
+
+public class IsRelationalDatabaseCondition implements Condition {
+
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {  // (1)
+        return oracleJdbcDriverOnClassPath() && databaseUrlSet(context); // (2)
+    }
+
+    private boolean databaseUrlSet(ConditionContext context) { // (3)
+        return context.getEnvironment().containsProperty("spring.datasource.url");
+    }
+
+    private boolean oracleJdbcDriverOnClassPath() { // (4)
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+}
+```
+
+`Condition` is an interface which exposes one method called "matches" that returns true/false: Has the condition been met or not.
+
+I am mixing up two conditions here: I want to check if the Oracle driver class is on the classpath. And I want to check if the user has set a database URL in a .properties file.
+
+Checking for a property is rather simple, as you can go through Spring’s environment class, which will, in turn, check all @PropertySources (think: application.properties) for a property.
+
+Checking for dependencies is also rather simple: You can check for the availability of a certain class on your classpath and if it is there, then you can assume the whole library is there.
+
+Though you would very likely split this class up into two different conditions in the real world, it highlights two very important conditions:
+
+You can create @Beans depending on specific available properties.
+
+You can create @Beans depending on specific libraries on your classpath.
+
+
+
 #### @ConditionalOnMissingBean 
 
 This annotation is used to load a bean only if a given bean is missing:
@@ -1636,6 +1735,37 @@ Some use cases where this annotation comes in handy are:
 
 - Specifying a default bean which allows being overridden in the case that a more specific bean of the same type is present in the context (for example: using a default authentication mechanism unless someone decides to replace it with his own custom authentication)
 
+#### More @ConditionalXXX
+
+Spring Boot comes with its own set of additional @Conditional annotations, which make developers' lives easier. (Note, that the following parameter values of the @Conditional annotations are just an example)
+
+`@ConditionalOnBean(DataSource.class)`. The condition is true only if the user specified a DataSource @Bean in a @Configuration.
+
+`@ConditionalOnClass(DataSource.class)`. The condition is true if the DataSource class is on the classpath.
+
+`@ConditionalOnCloudPlatform(CloudPlatform.Heroku)`. The condition is true if the CloudPlatform is set to Heroku.
+
+`@ConditionalOnExpression("someSpELExpression)`. The condition is true if the SpEL expression is true.
+
+`@ConditionalOnJava(JavaVersion.EIGHT)`. The condition is true if the current Java version is 8.
+
+`@ConditionalOnJndi("java:comp/env/ejb/myEJB")`. The condition is true if the specified JNDI context exists.
+
+`@ConditionalOnMissingBean(DataSource.class)`. The condition is true if the user did not specify a DataSource @Bean in any @Configuration.
+
+`@ConditionalOnMissingClass(DataSource.class)`. The condition is true if the DataSource class is not on the classpath.
+
+`@ConditionalOnNotWebApplication`. The condition is true if the application is not a web application.
+
+`@ConditionalOnProperty("my.property")`. The condition is true if my.property is set.
+
+`@ConditionalOnResource("classpath:my.properties")`. The condition is true if my.properties exists.
+
+`@ConditionalOnSingleCandidate(DataSource.class)`. Matches if there is exactly one primary DataSource bean specified in your application.
+
+`@ConditionalOnWebApplication`. The condition is true if the application is a web application.
+
+So, in short, with Spring Boot you do not have to write the most common conditions yourself (like checking for a property). Instead, you can use its enhanced @Conditional annotations.
 
 #### @Configuration
 
