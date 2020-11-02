@@ -1440,6 +1440,10 @@ That is what is meant by "opinionated defaults" on the Spring Boot homepage.
 https://www.marcobehler.com/guides/spring-boot
 
 
+#### Spring Security
+
+https://www.marcobehler.com/guides/spring-security
+
 #### Spring Data
 
 #### Stream with spring cloud stream
