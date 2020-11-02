@@ -1425,6 +1425,18 @@ Spring Boot is just a shared context configuration with tons of `@Conditional`s?
 
 `@Conditional`s that create a DataSource for you, because you have set specific properties (think: spring.datasource.url)? Or `@Conditional`s that boot up an embedded Tomcat server for you because you have the Tomcat libraries on your classpath?
 
+Spring Boot is just a couple of AutoConfigurations classes (== normal Spring `@Configurations`), that create @Beans for you if certain @Conditions are met.
+
+Three of the most important conditions are
+
+`@ConditionalOnClass`. Checking for dependencies or rather specific classes of dependencies (think: Tomcat, HikariCP, etc).
+
+`@ConditionalOnProperty`. Self-explanatory.
+
+`@ConditionalOnMissingBean`. If the user specified his own, e.g. DataSource, already, then Spring Boot won’t try to create its auto-configured one.
+
+That is what is meant by "opinionated defaults" on the Spring Boot homepage.
+
 https://www.marcobehler.com/guides/spring-boot
 
 
