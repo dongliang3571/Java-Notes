@@ -1473,6 +1473,10 @@ https://htr3n.github.io/2018/12/jsp-spring-boot/
 
 https://www.baeldung.com/spring-request-response-body
 
+#### @Valid && Validated
+
+https://www.baeldung.com/spring-valid-vs-validated
+
 #### @ResponseStatus
 
 https://www.baeldung.com/spring-response-status
