@@ -1468,6 +1468,8 @@ https://thorben-janssen.com/hibernate-tips-use-auto-incremented-column-primary-k
 
 https://dzone.com/articles/keep-your-secrets-away-from-code-consul-spring-boo
 
+The consul config is given the **highest priority** by default. You can set `spring.cloud.config.override-none=true` and it will make external config the lowest priority. You can set `spring.cloud.config.override-system-properties=false` which will put them below system properties, which will also make cli args higher priority.
+
 #### Bootstrap.xml vs. Application.xml
 
 the configuration properties of the bootstrap context load **before** the configuration properties of the application context.
