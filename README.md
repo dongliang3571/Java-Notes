@@ -1464,6 +1464,16 @@ https://stackoverflow.com/questions/221611/creation-timestamp-and-last-update-ti
 
 https://thorben-janssen.com/hibernate-tips-use-auto-incremented-column-primary-key/#:~:text=If%20you%20want%20to%20use,IDENTITY.&text=If%20you%20now%20persist%20a,generate%20the%20primary%20key%20value.
 
+#### Read config from consul
+
+https://dzone.com/articles/keep-your-secrets-away-from-code-consul-spring-boo
+
+#### Bootstrap.xml vs. Application.xml
+
+the configuration properties of the bootstrap context load **before** the configuration properties of the application context.
+
+https://www.baeldung.com/spring-cloud-bootstrap-properties
+
 #### Spring boot with JSP
 
 https://htr3n.github.io/2018/12/jsp-spring-boot/
