@@ -834,7 +834,7 @@ public class DogLauncher {
 }
 ```
 
-### Apparent Hierarchies of Packages
+#### Apparent Hierarchies of Packages
 
 At first, packages appear to be hierarchical, but they are not. For example, the Java API includes a `java.awt` package, a `java.awt.color` package, a `java.awt.font` package, and many others that begin with `java.awt`. However, the `java.awt.color` package, the `java.awt.font` package, and other `java.awt.xxxx` packages are not included in the `java.awt` package. The prefix `java.awt` (the Java Abstract Window Toolkit) is used for a number of related packages to make the relationship evident, but not to show inclusion.
 
@@ -845,7 +845,7 @@ import java.awt.*;
 import java.awt.color.*;
 ```
 
-### The static import statment
+#### The static import statment
 
 There are situations where you need frequent access to static final fields (constants) and static methods from one or two classes. Prefixing the name of these classes over and over can result in cluttered code. ***The static import statement gives you a way to import the constants and static methods that you want to use so that you do not need to prefix the name of their class.***
 
@@ -891,13 +891,13 @@ import static mypackage.MyConstants.*;
 ```
 
 
-## Return Object
+#### Return Object
 
 In Java, You always return a copy of reference (unless returned value is a primitive type such as int, float, char, ...).
 
 So, if you don't want the returned object to be modified, you must return a full copy of it (you could use Clonable interface and clone method if your class defines it). Or the object is designed to be immutable.
 
-## Bitwise operation
+#### Bitwise operation
 
 **Operators:**
 
@@ -927,6 +927,26 @@ byte b = ~b;
 
 byte b = (byte)~b;
 ```
+
+### Useful Class
+
+
+- `<object>.getClass()`
+
+- `Class.getResource("filename")`
+
+- `ClassLoader.getResource("filename")`
+
+
+When you use
+
+this.getClass().getResource("myFile.ext")
+getResource will try to find the resource relative to the package. If you use:
+
+this.getClass().getResource("/myFile.ext")
+getResource will treat it as an absolute path and simply call the classloader like you would have if you'd done.
+
+this.getClass().getClassLoader().getResource("myFile.ext")
 
 ### Java Web Development
 
