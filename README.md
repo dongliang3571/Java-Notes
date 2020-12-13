@@ -2157,6 +2157,14 @@ This approach to metrics is very difficult to maintain, expand, and extend, beca
 
 Aspect-oriented programming gives you a way to encapsulate this type of behavior functionality. It allows you to add behavior such as metrics "around" your code. For example, AOP provides you with programmatic control to specify that you want calls to BankAccountDAO to go through a metrics aspect before executing the actual body of that code.
 
+#### Websocket && STOMP Spring
+
+https://www.toptal.com/java/stomp-spring-boot-websocket
+
+The WebSocket protocol is a rather low-level protocol. It defines how a stream of bytes is transformed into frames. A frame may contain a text or a binary message. Because the message itself does not provide any additional information on how to route or process it, It is difficult to implement more complex applications without writing additional code. Fortunately, the WebSocket specification allows using of sub-protocols that operate on a higher, application level. One of them, supported by the Spring Framework, is STOMP.
+
+STOMP is a simple text-based messaging protocol that was initially created for scripting languages such as Ruby, Python, and Perl to connect to enterprise message brokers. Thanks to STOMP, clients and brokers developed in different languages can send and receive messages to and from each other. **The WebSocket protocol is sometimes called TCP for Web. Analogically, STOMP is called HTTP for Web**. It defines a handful of frame types that are mapped onto WebSockets frames, e.g., CONNECT, SUBSCRIBE, UNSUBSCRIBE, ACK, or SEND. On one hand, these commands are very handy to manage communication while, on the other, they allow us to implement solutions with more sophisticated features like message acknowledgment.
+
 ### Testing
 
 #### JUnit
