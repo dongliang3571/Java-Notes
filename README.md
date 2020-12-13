@@ -2161,6 +2161,10 @@ Aspect-oriented programming gives you a way to encapsulate this type of behavior
 
 https://www.toptal.com/java/stomp-spring-boot-websocket
 
+##### STOMP over WebSocket
+
+The WebSocket communication protocol itself does not mandate any particular messaging format. It is up to the applications to agree upon the format of the messages exchanged. This format is referred to as the subprotocol. (Kinda similar to how the web browser and web server have agreed to using the HTTP protocol over TCP sockets.)
+
 The WebSocket protocol is a rather low-level protocol. It defines how a stream of bytes is transformed into frames. A frame may contain a text or a binary message. Because the message itself does not provide any additional information on how to route or process it, It is difficult to implement more complex applications without writing additional code. Fortunately, the WebSocket specification allows using of sub-protocols that operate on a higher, application level. One of them, supported by the Spring Framework, is STOMP.
 
 STOMP is a simple text-based messaging protocol that was initially created for scripting languages such as Ruby, Python, and Perl to connect to enterprise message brokers. Thanks to STOMP, clients and brokers developed in different languages can send and receive messages to and from each other. **The WebSocket protocol is sometimes called TCP for Web. Analogically, STOMP is called HTTP for Web**. It defines a handful of frame types that are mapped onto WebSockets frames, e.g., CONNECT, SUBSCRIBE, UNSUBSCRIBE, ACK, or SEND. On one hand, these commands are very handy to manage communication while, on the other, they allow us to implement solutions with more sophisticated features like message acknowledgment.
