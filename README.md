@@ -346,7 +346,49 @@ public void writeList() throws IOException {
 }
 ```
 
-### Why checked and unchecked exceptions
+#### Try-with-resources and try-catch-finally
+
+**Note:** A try-with-resources statement can have catch and finally blocks just like an ordinary try statement. In a try-with-resources statement, any catch or finally block is run after the resources declared have been closed.
+
+A equivalent try-catch-finally implementation of Try-with-resources:
+
+```java
+import java.io.IOException;
+import java.util.zip.GZIPOutputStream;
+
+public class TryCatchFinally {
+    public static void main(String[] args) {
+        try {
+            final GZIPOutputStream gzip = new GZIPOutputStream(System.out);
+            Throwable gzipEx = null;
+            try {
+                gzip.write("TEST".getBytes("UTF-8"));
+            } catch (Throwable t) {
+                gzipEx = t;
+                throw t;
+            } finally {
+                if (gzip != null) {
+                    if (gzipEx != null) {
+                        try {
+                            gzip.close();
+                        } catch (Throwable t) {
+                            gzipEx.addSuppressed(t); // suppress the exception in the finally block, let the exception from try block to throw
+                        }
+                    } else {
+                        gzip.close();
+                    }
+                }
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+}
+```
+
+If exceptions from try block and finally block are both thrown, by default, the exception in finally block is thrown. However we can use `Throwable.addSuppressed()` to suppress the one from finally block, and let the one from try block to throw.
+
+#### Why checked and unchecked exceptions
 
 https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html
 
