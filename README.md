@@ -1514,9 +1514,6 @@ https://www.marcobehler.com/guides/spring-security
 
 https://java2blog.com/spring-boot-hibernate-example/
 
-#### @SpringBootApplication annotation
-
-The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes.
 
 #### CreatedOn and UpdatedOn with Hibernate
 
@@ -1542,20 +1539,25 @@ https://www.baeldung.com/spring-cloud-bootstrap-properties
 
 https://htr3n.github.io/2018/12/jsp-spring-boot/
 
+#### Spring, Junit Annoations
 
-#### @RequestBody && @ResponseBody
+##### @SpringBootApplication annotation
+
+The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes.
+
+##### @RequestBody && @ResponseBody
 
 https://www.baeldung.com/spring-request-response-body
 
-#### @Valid && Validated
+##### @Valid && Validated
 
 https://www.baeldung.com/spring-valid-vs-validated
 
-#### @ResponseStatus
+##### @ResponseStatus
 
 https://www.baeldung.com/spring-response-status
 
-#### @Value
+##### @Value
 
 https://www.baeldung.com/spring-value-annotation
 
@@ -1590,23 +1592,23 @@ Default values can be provided for properties that might not be defined. Here, t
 private String someDefault;
 ```
 
-#### @Resource, @Inject and @Autowired
+##### @Resource, @Inject and @Autowired
 
 https://www.baeldung.com/spring-annotations-resource-inject-autowire
 
 https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pankaj-kumar/
 
-#### @Component
+##### @Component
 
 `@Component` is the most generic Spring annotation. A Java class decorated with` @Component` is found during classpath scanning and registered in the context as a Spring bean. `@Service`, `@Repository`, and `@Controller` are specializations of `@Component`, which are used for more specific cases.
 
 `@ComponentScan` ensures that the classes decorated with `@Component` are found and registered as Spring beans. `@ComponentScan` is automatically included with `@SpringBootApplication`.
 
-#### @Bean
+##### @Bean
 
 `@Bean` servers a similar purpose as `@Component`. It is not autodetected. Methods decorated with `@Bean` produce a bean to be managed by the Spring container during configuration stage.
 
-#### Difference between @Bean and @Component
+##### Difference between @Bean and @Component
 
 @Component and @Bean do two quite different things, and shouldn't be confused.
 
@@ -1614,7 +1616,7 @@ https://www.linkedin.com/pulse/difference-between-inject-vs-autowire-resource-pa
 
 @Bean is used to explicitly declare a single bean, rather than letting Spring do it automatically as above. It decouples the declaration of the bean from the class definition, and lets you create and configure beans exactly how you choose.
 
-#### When use @Bean?
+##### When use @Bean?
 
 When should you use @Bean?
 
@@ -1729,7 +1731,7 @@ public static class Config {
 }
 ```
 
-#### @Conditional
+##### @Conditional
 
 The Spring Framework offers the `@Conditional` annotation since version 4.0 (released on 2013). You can put it on `@Bean` methods, `@Components` or even `@Configurations` and it looks like so:
 
@@ -1809,7 +1811,7 @@ You can create @Beans depending on specific libraries on your classpath.
 
 
 
-#### @ConditionalOnMissingBean 
+##### @ConditionalOnMissingBean 
 
 This annotation is used to load a bean only if a given bean is missing:
 
@@ -1829,7 +1831,7 @@ Some use cases where this annotation comes in handy are:
 
 - Specifying a default bean which allows being overridden in the case that a more specific bean of the same type is present in the context (for example: using a default authentication mechanism unless someone decides to replace it with his own custom authentication)
 
-#### More @ConditionalXXX
+##### More @ConditionalXXX
 
 Spring Boot comes with its own set of additional @Conditional annotations, which make developers' lives easier. (Note, that the following parameter values of the @Conditional annotations are just an example)
 
@@ -1861,7 +1863,7 @@ Spring Boot comes with its own set of additional @Conditional annotations, which
 
 So, in short, with Spring Boot you do not have to write the most common conditions yourself (like checking for a property). Instead, you can use its enhanced @Conditional annotations.
 
-#### @Configuration
+##### @Configuration
 
 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html
 
@@ -1875,7 +1877,7 @@ public @interface Configuration
 
 Indicates that a class declares one or more `@Bean` methods and may be processed by the Spring container to generate bean definitions and service requests for those beans at runtime, for example:
 
-#### @ConfigurationProperties
+##### @ConfigurationProperties
 
 http://zetcode.com/springboot/configurationproperties/
 
@@ -1932,7 +1934,7 @@ public class AppProperties {
 }
 ```
 
-#### @PropertySource
+##### @PropertySource
 
 https://mkyong.com/spring/spring-propertysources-example/
 
@@ -2099,9 +2101,9 @@ public class AppConfig {
 ```
 
 
-#### @Import
+##### @Import
 
-#### what is the difference between @Configuration and @Import
+##### what is the difference between @Configuration and @Import
 
 ```java
 @Configuration 
@@ -2117,7 +2119,7 @@ class ConfigA extends ConfigB {
 
 `@Import` would allow you to import multiple configurations while extending will restrict you to one class since java doesn't support multiple inheritance.
 
-#### @Profile
+##### @Profile
 
 Profiles are a core feature of the framework — allowing us to map our beans to different profiles — for example, **dev, test, and prod**.
 
@@ -2140,7 +2142,7 @@ public class DevDatasourceConfig
 Pass `-Dspring.profiles.active=dev` to the VM Options to activate a profile
 
 
-#### @Enable 
+##### @Enable 
 
 https://www.baeldung.com/spring-enable-annotations
 
@@ -2155,6 +2157,20 @@ Spring comes with a set of `@Enable` annotations that make it easier for develop
 - @EnableTransactionManagement
 - @EnableJpaAuditing
 
+##### Junit @Rule
+
+https://www.baeldung.com/junit-4-rules
+
+JUnit 4 rules provide a flexible mechanism to enhance tests by running some code around a test case execution. In some sense, it’s similar to having `@Before` and `@After` annotations in our test class.
+
+Let's imagine we wanted to connect to an external resource such as a database during test setup and then close the connection after our test finishes. If we want to use that database in multiple tests, we'd end up duplicating that code in every test.
+
+By using a rule, we can have everything isolated in one place and reuse the code easily from multiple test classes.
+
+So how can we use rules? We can use JUnit 4 rules by following these simple steps:
+
+Add a public field to our test class and ensure that the type of this field is a subtype of the org.junit.rules.TestRule interface
+Annotate the field with the @Rule annotation
 
 #### Aspect-Oriented Programming(AOP)
 
