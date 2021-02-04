@@ -2103,21 +2103,56 @@ public class AppConfig {
 
 ##### @Import
 
-##### what is the difference between @Configuration and @Import
+https://www.baeldung.com/spring-import-annotation
+
+##### what is the difference between @Import vs @ComponentScan
+
+- Both annotations can accept any `@Component` or `@Configuration` class.
 
 ```java
-@Configuration 
-class ConfigA extends ConfigB { 
-//Some bean definitions here 
+@Configuration
+@Import(Bug.class)
+class BugConfig {
 }
 
-@Configuration 
-@Import({ConfigB.class}) class ConfigA { 
-//Some bean definitions here 
+@Component(value = "bug")
+class Bug {
 }
 ```
 
+- Spring generally promotes the convention-over-configuration approach. `@ComponentScan` is more like convention, while `@Import` looks like configuration.
+
 `@Import` would allow you to import multiple configurations while extending will restrict you to one class since java doesn't support multiple inheritance.
+
+We can aim for the best of both worlds. Let's picture that we have a package only for our animals. It could also be a component or module and keep the same idea.
+
+Then we can have one @ComponentScan just for our animal package:
+
+```java
+package com.baeldung.importannotation.animal;
+
+// imports...
+
+@Configuration
+@ComponentScan
+public class AnimalScanConfiguration {
+}
+```
+
+And an @Import to keep control over what we'll add to the context:
+
+```java
+package com.baeldung.importannotation.zoo;
+
+// imports...
+
+@Configuration
+@Import(AnimalScanConfiguration.class)
+class ZooApplication {
+}
+```
+
+Finally, any new bean added to the animal package will be automatically found by our context. And we still have explicit control over the configurations we are using.
 
 ##### @Profile
 
