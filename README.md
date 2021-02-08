@@ -1549,6 +1549,54 @@ The @SpringBootApplication annotation is equivalent to using @Configuration, @En
 
 https://www.baeldung.com/spring-request-response-body
 
+the `@RequestBody` annotation maps the HttpRequest body to a transfer or domain object, enabling automatic deserialization of the inbound HttpRequest body onto a Java object.
+
+```java
+@PostMapping("/request")
+public ResponseEntity postController(@RequestBody LoginForm loginForm) {
+ 
+    exampleService.fakeAuthenticate(loginForm);
+    return ResponseEntity.ok(HttpStatus.OK);
+}
+```
+
+```java
+public class LoginForm {
+    private String username;
+    private String password;
+    // ...
+}
+```
+
+The `@ResponseBody` annotation tells a controller that the object returned is automatically serialized into JSON and passed back into the HttpResponse object.
+
+```java
+public class ResponseTransfer {
+    private String text; 
+    
+    // standard getters/setters
+}
+```
+
+```java
+@Controller
+@RequestMapping("/post")
+public class ExamplePostController {
+
+    @Autowired
+    ExampleService exampleService;
+
+    @PostMapping("/response")
+    @ResponseBody
+    public ResponseTransfer postResponseController(
+      @RequestBody LoginForm loginForm) {
+        return new ResponseTransfer("Thanks For Posting!!!");
+     }
+}
+```
+
+**Remember, we don't need to annotate the `@RestController-annotated controllers` with the `@ResponseBody` annotation since Spring does it by default.**
+
 ##### @Valid && Validated
 
 https://www.baeldung.com/spring-valid-vs-validated
