@@ -1493,7 +1493,7 @@ Three of the most important conditions are
 
 `@ConditionalOnClass`. Checking for dependencies or rather specific classes of dependencies (think: Tomcat, HikariCP, etc).
 
-`@ConditionalOnProperty`. Self-explanatory.
+`@ConditionalOnProperty`. Need to create some beans conditionally based on the presence and the value of a configuration property.
 
 `@ConditionalOnMissingBean`. If the user specified his own, e.g. DataSource, already, then Spring Boot won’t try to create its auto-configured one.
 
