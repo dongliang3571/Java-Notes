@@ -2647,6 +2647,10 @@ the JAR file created by the `mvn package` command contains only the resources an
 
 he spring-boot:repackage goal takes the existing JAR or WAR archive as the source **and repackages all the project runtime dependencies** inside the final artifact together with project classes.
 
+**Custom Classifier**
+
+By default, the repackage goal replaces the original artifact with the repackaged one. That is a sane behavior for modules that represent an application but if your module is used as a dependency of another module, you need to provide a classifier for the repackaged one. The reason for that is that application classes are packaged in `BOOT-INF/classes` so that the dependent module cannot load a repackaged jar’s classes.
+
 #### Profiles
 
 https://maven.apache.org/guides/introduction/introduction-to-profiles.html
