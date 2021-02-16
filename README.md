@@ -2635,6 +2635,18 @@ mvn verify
 - Maven Surefire Plugin - To run unit tests
 - Maven Failsafe Plugin - To run integration tests
 
+#### Difference between `mvn package` and `spring-boot:repackage`
+
+https://www.baeldung.com/spring-boot-repackage-vs-mvn-package
+
+`mvn package`
+
+the JAR file created by the `mvn package` command contains only the resources and compiled Java classes from our project's source
+
+`spring-boot:repackage`
+
+he spring-boot:repackage goal takes the existing JAR or WAR archive as the source **and repackages all the project runtime dependencies** inside the final artifact together with project classes.
+
 #### Profiles
 
 https://maven.apache.org/guides/introduction/introduction-to-profiles.html
