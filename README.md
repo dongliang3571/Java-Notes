@@ -2654,3 +2654,11 @@ By default, the repackage goal replaces the original artifact with the repackage
 #### Profiles
 
 https://maven.apache.org/guides/introduction/introduction-to-profiles.html
+
+### Integration test with testcontainers
+
+https://www.baeldung.com/spring-boot-testcontainers-integration-test
+
+https://github.com/testcontainers/testcontainers-java/tree/master
+
+- MockServerContainer - https://github.com/mock-server/mockserver
